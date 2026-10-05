@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PMS | Smart Search — Prisoner Management System</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--primary:#1e293b;
+--accent:#2563eb;
+--accent2:#1d4ed8;
+--bg:#f8fafc;
+--card:#fff;
+--text:#334155;
+--muted:#64748b;
+--border:#e2e8f0;
+--success:#10b981;
+--danger:#ef4444;
+--warning:#f59e0b;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Noto Sans Bengali','Inter',sans-serif}
+body{background:var(--bg);color:var(--text);min-height:100vh}
+.main-wrapper{width:100%;max-width:1600px;margin:auto;padding:16px;min-height:100vh}
+
+/* TOPBAR */
+.topbar{
+background:var(--card);border:1px solid var(--border);border-radius:9px;
+padding:12px 18px;display:flex;justify-content:space-between;
+align-items:center;margin-bottom:12px;box-shadow:0 1px 3px #00000005
+}
+.page-title{font-size:19px;font-weight:700;color:var(--primary)}
+.breadcrumb{font-size:11.5px;color:var(--muted);margin-top:2px}
+.status-pill{
+font-size:10.5px;padding:3px 9px;border-radius:15px;
+background:#dbeafe;color:#1d4ed8;font-weight:600;margin-left:7px
+}
+.top-right{display:flex;align-items:center;gap:9px}
+.icon-btn{
+width:35px;height:35px;border:1px solid var(--border);
+background:var(--bg);border-radius:7px;display:flex;
+align-items:center;justify-content:center;color:var(--text);cursor:pointer
+}
+.icon-btn:hover{background:var(--border)}
+.user-box{
+display:flex;align-items:center;gap:8px;border-left:1px solid var(--border);
+padding-left:12px
+}
+.avatar{
+width:34px;height:34px;border-radius:50%;background:var(--accent);
+color:#fff;display:flex;align-items:center;justify-content:center;
+font-size:12px;font-weight:700
+}
+.user-info b{display:block;font-size:12px}
+.user-info span{font-size:10px;color:var(--muted)}
+
+/* SEARCH CARD */
+.search-card{
+background:#fff;border:1px solid var(--border);border-radius:9px;
+padding:15px 18px;margin-bottom:12px;box-shadow:0 1px 3px #00000005
+}
+.search-header{
+display:flex;justify-content:space-between;align-items:center;
+margin-bottom:11px
+}
+.search-title{font-size:15px;font-weight:700;color:var(--primary)}
+.search-desc{font-size:11px;color:var(--muted)}
+.search-main{
+display:grid;grid-template-columns:1fr 125px 105px;
+gap:8px
+}
+.search-input-wrap{position:relative}
+.search-input{
+width:100%;height:42px;border:1px solid var(--border);
+border-radius:7px;padding:8px 42px 8px 13px;
+font-size:13px;outline:none
+}
+.search-input:focus{
+border-color:var(--accent);
+box-shadow:0 0 0 3px #2563eb12
+}
+.search-icon{
+position:absolute;right:14px;top:12px;color:#94a3b8
+}
+.search-btn{
+height:42px;border:0;border-radius:7px;background:var(--accent);
+color:#fff;font-size:12.5px;font-weight:600
+}
+.search-btn:hover{background:var(--accent2)}
+.clear-btn{
+height:42px;border:1px solid var(--border);border-radius:7px;
+background:var(--bg);color:var(--text);font-size:12px
+}
+
+/* SEARCH TYPE */
+.search-types{
+display:flex;flex-wrap:wrap;gap:6px;margin-top:9px
+}
+.type-btn{
+border:1px solid var(--border);background:#fff;
+padding:5px 10px;border-radius:5px;font-size:10.5px;
+color:var(--muted);cursor:pointer
+}
+.type-btn.active,.type-btn:hover{
+background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8
+}
+
+/* FILTER */
+.filter-bar{
+display:none;margin-top:11px;padding-top:11px;
+border-top:1px solid var(--border)
+}
+.filter-grid{
+display:grid;grid-template-columns:repeat(6,1fr);gap:8px
+}
+.f-label{
+display:block;font-size:10.5px;font-weight:600;
+margin-bottom:4px;color:var(--text)
+}
+.f-control{
+width:100%;height:35px;border:1px solid var(--border);
+border-radius:6px;padding:6px 9px;font-size:11.5px;
+background:#fff;color:var(--text);outline:none
+}
+.f-control:focus{border-color:var(--accent)}
+.filter-actions{
+display:flex;justify-content:flex-end;gap:7px;margin-top:9px
+}
+.small-btn{
+border:1px solid var(--border);background:#fff;
+padding:6px 11px;border-radius:5px;font-size:10.5px
+}
+.small-primary{
+background:var(--accent);color:#fff;border-color:var(--accent)
+}
+
+/* RESULT HEADER */
+.result-header{
+background:#fff;border:1px solid var(--border);border-radius:9px;
+padding:10px 14px;display:flex;justify-content:space-between;
+align-items:center;margin-bottom:9px
+}
+.result-count{font-size:12px;font-weight:600;color:var(--primary)}
+.result-count span{color:var(--accent)}
+.result-actions{display:flex;gap:6px}
+.result-btn{
+border:1px solid var(--border);background:#fff;border-radius:5px;
+padding:5px 9px;font-size:10.5px;color:var(--text)
+}
+
+/* RESULT TABLE */
+.table-card{
+background:#fff;border:1px solid var(--border);border-radius:9px;
+overflow:hidden;box-shadow:0 1px 3px #00000005
+}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:1050px}
+th,td{
+padding:8px 9px;border-bottom:1px solid var(--border);
+font-size:11px;vertical-align:middle
+}
+th{background:#f8fafc;color:#475569;font-weight:700;white-space:nowrap}
+tbody tr:hover{background:#f8fafc}
+.photo{
+width:38px;height:46px;border-radius:5px;border:1px solid var(--border);
+background:#f1f5f9;display:flex;align-items:center;justify-content:center;
+color:#94a3b8;overflow:hidden
+}
+.photo img{width:100%;height:100%;object-fit:cover}
+.prisoner-name{font-weight:700;color:var(--primary);font-size:11.5px}
+.prisoner-en{font-size:9.5px;color:var(--muted)}
+.badge-status{
+display:inline-block;padding:3px 7px;border-radius:12px;
+font-size:9px;font-weight:600
+}
+.badge-hajati{background:#fef3c7;color:#b45309}
+.badge-koidi{background:#dcfce7;color:#15803d}
+.badge-transfer{background:#dbeafe;color:#1d4ed8}
+.badge-remand{background:#fee2e2;color:#b91c1c}
+.action-buttons{display:flex;gap:4px}
+.row-btn{
+width:28px;height:28px;border:1px solid var(--border);
+background:#fff;border-radius:5px;display:flex;
+align-items:center;justify-content:center;cursor:pointer
+}
+.row-btn:hover{background:#f1f5f9}
+.view-btn{color:var(--accent)}
+.edit-btn{color:#64748b}
+.print-btn{color:#475569}
+
+/* EMPTY */
+.empty-state{
+padding:55px 20px;text-align:center;color:var(--muted)
+}
+.empty-icon{
+width:58px;height:58px;border-radius:50%;background:#eff6ff;
+color:#60a5fa;margin:0 auto 10px;display:flex;
+align-items:center;justify-content:center;font-size:22px
+}
+.empty-state h4{font-size:14px;color:var(--primary);margin-bottom:4px}
+.empty-state p{font-size:11px}
+
+/* DETAILS */
+.details-card{
+display:none;background:#fff;border:1px solid var(--border);
+border-radius:9px;margin-top:12px;overflow:hidden
+}
+.details-header{
+padding:11px 15px;background:#fafafa;border-bottom:1px solid var(--border);
+display:flex;justify-content:space-between;align-items:center
+}
+.details-title{font-size:14px;font-weight:700;color:var(--primary)}
+.details-body{padding:14px}
+.profile{
+display:grid;grid-template-columns:85px 1fr;gap:14px;
+padding-bottom:13px;border-bottom:1px solid var(--border);margin-bottom:13px
+}
+.profile-photo{
+width:82px;height:100px;border:1px solid var(--border);
+border-radius:7px;background:#f8fafc;display:flex;
+align-items:center;justify-content:center;color:#94a3b8;overflow:hidden
+}
+.profile-photo img{width:100%;height:100%;object-fit:cover}
+.profile-name{font-size:17px;font-weight:700;color:var(--primary)}
+.profile-en{font-size:11px;color:var(--muted);margin-bottom:7px}
+.profile-meta{display:flex;flex-wrap:wrap;gap:5px}
+.meta{
+font-size:10px;background:#f8fafc;border:1px solid var(--border);
+padding:4px 7px;border-radius:4px
+}
+.detail-grid{
+display:grid;grid-template-columns:repeat(4,1fr);gap:8px
+}
+.detail-item{
+border:1px solid var(--border);border-radius:6px;padding:8px;
+background:#fafafa
+}
+.detail-label{font-size:9.5px;color:var(--muted);margin-bottom:2px}
+.detail-value{font-size:11px;font-weight:600;color:var(--text);word-break:break-word}
+
+/* TABS */
+.info-tabs{
+display:flex;gap:4px;border-bottom:1px solid var(--border);
+margin-top:13px;overflow:auto
+}
+.info-tab{
+border:0;background:transparent;padding:7px 11px;
+font-size:10.5px;color:var(--muted);white-space:nowrap
+}
+.info-tab.active{color:var(--accent);border-bottom:2px solid var(--accent);font-weight:700}
+.tab-content{padding-top:10px}
+.info-table{width:100%;min-width:0}
+.info-table th,.info-table td{font-size:10.5px;padding:6px 7px}
+
+/* FOOTER */
+footer{
+padding:12px;text-align:center;font-size:10.5px;color:var(--muted)
+}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+.filter-grid{grid-template-columns:repeat(3,1fr)}
+.detail-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+.main-wrapper{padding:9px}
+.topbar{padding:10px 12px}
+.user-box{display:none}
+.search-main{grid-template-columns:1fr}
+.search-btn,.clear-btn{width:100%}
+.filter-grid{grid-template-columns:repeat(2,1fr)}
+.detail-grid{grid-template-columns:1fr}
+.profile{grid-template-columns:70px 1fr}
+.profile-photo{width:68px;height:82px}
+}
+@media(max-width:480px){
+.filter-grid{grid-template-columns:1fr}
+.page-title{font-size:16px}
+.top-right .icon-btn{display:none}
+}
+</style>
+</head>
+
+<body>
+<div class="main-wrapper">
+
+<!-- TOPBAR -->
+<header class="topbar">
+<div>
+<div class="page-title">
+<i class="fa-solid fa-magnifying-glass text-primary me-1"></i>
+স্মার্ট সার্চ
+<span class="status-pill">PMS</span>
+</div>
+<div class="breadcrumb">
+PMS / বন্দি ব্যবস্থাপনা / তথ্য অনুসন্ধান
+</div>
+</div>
+
+<div class="top-right">
+<button class="icon-btn" title="নোটিফিকেশন">
+<i class="fa-regular fa-bell"></i>
+</button>
+<button class="icon-btn" title="সহায়তা">
+<i class="fa-solid fa-circle-question"></i>
+</button>
+<div class="user-box">
+<div class="avatar">NU</div>
+<div class="user-info">
+<b>Engr. Nizam Uddin</b>
+<span>জেল সুপার</span>
+</div>
+</div>
+</div>
+</header>
+
+<!-- SEARCH -->
+<section class="search-card">
+
+<div class="search-header">
+<div>
+<div class="search-title">
+<i class="fa-solid fa-database me-1 text-primary"></i>
+বন্দির তথ্য অনুসন্ধান
+</div>
+<div class="search-desc">
+নাম, NID, বন্দি নম্বর, মোবাইল, মামলা অথবা রেফারেন্স নম্বর দিয়ে অনুসন্ধান করুন
+</div>
+</div>
+
+<button class="small-btn" id="btnAdvanced">
+<i class="fa-solid fa-sliders me-1"></i>
+Advanced Filter
+</button>
+</div>
+
+<div class="search-main">
+
+<div class="search-input-wrap">
+<input
+type="search"
+id="searchInput"
+class="search-input"
+placeholder="Search: নাম / NID / Prisoner ID / Mobile / Case No / Ref No..."
+autocomplete="off">
+<i class="fa-solid fa-magnifying-glass search-icon"></i>
+</div>
+
+<button class="search-btn" id="btnSearch">
+<i class="fa-solid fa-search me-1"></i>
+খুঁজুন
+</button>
+
+<button class="clear-btn" id="btnClear">
+<i class="fa-solid fa-eraser me-1"></i>
+ক্লিয়ার
+</button>
+
+</div>
+
+<div class="search-types">
+<button class="type-btn active" data-type="all">
+সব তথ্য
+</button>
+<button class="type-btn" data-type="name">
+নাম
+</button>
+<button class="type-btn" data-type="nid">
+NID
+</button>
+<button class="type-btn" data-type="prisoner">
+বন্দি নম্বর
+</button>
+<button class="type-btn" data-type="mobile">
+মোবাইল
+</button>
+<button class="type-btn" data-type="case">
+মামলা নম্বর
+</button>
+<button class="type-btn" data-type="reference">
+Reference
+</button>
+<button class="type-btn" data-type="biometric">
+Biometric
+</button>
+</div>
+
+<!-- ADVANCED FILTER -->
+<div class="filter-bar" id="filterBar">
+
+<div class="filter-grid">
+
+<div>
+<label class="f-label">বন্দির শ্রেণী</label>
+<select class="f-control" id="filterClass">
+<option value="">সব</option>
+<option>হাজতি</option>
+<option>কয়েদী</option>
+<option>সিভিল</option>
+<option>ডিটেনশন</option>
+</select>
+</div>
+
+<div>
+<label class="f-label">বন্দির প্রকৃতি</label>
+<select class="f-control" id="filterNature">
+<option value="">সব</option>
+<option>সাধারণ (General)</option>
+<option>বিদ্রোহী (Rebel)</option>
+<option>ডিভিশনপ্রাপ্ত বন্দী (Divisioned)</option>
+<option>সন্ত্রাসী (Terrorist)</option>
+<option>জঙ্গি (Extremist)</option>
+<option>রাজনৈতিক (Political)</option>
+<option>বিদেশী নাগরিক (Foreign National)</option>
+<option>অন্যান্য (Others)</option>
+</select>
+</div>
+
+<div>
+<label class="f-label">লিঙ্গ</label>
+<select class="f-control" id="filterGender">
+<option value="">সব</option>
+<option>পুরুষ</option>
+<option>মহিলা</option>
+<option>হিজড়া</option>
+</select>
+</div>
+
+<div>
+<label class="f-label">জেলা</label>
+<input class="f-control" id="filterDistrict" placeholder="জেলার নাম">
+</div>
+
+<div>
+<label class="f-label">ভর্তির তারিখ থেকে</label>
+<input type="date" class="f-control" id="filterFrom">
+</div>
+
+<div>
+<label class="f-label">ভর্তির তারিখ পর্যন্ত</label>
+<input type="date" class="f-control" id="filterTo">
+</div>
+
+</div>
+
+<div class="filter-actions">
+<button class="small-btn" id="btnResetFilter">
+<i class="fa-solid fa-rotate-left me-1"></i> Reset
+</button>
+<button class="small-btn small-primary" id="btnApplyFilter">
+<i class="fa-solid fa-filter me-1"></i> Filter Apply
+</button>
+</div>
+
+</div>
+</section>
+
+<!-- RESULT HEADER -->
+<div class="result-header">
+
+<div class="result-count">
+Search Result:
+<span id="resultCount">0</span>
+টি রেকর্ড
+</div>
+
+<div class="result-actions">
+<button class="result-btn" id="btnExport">
+<i class="fa-solid fa-file-export me-1"></i>
+Export
+</button>
+<button class="result-btn" id="btnPrintResults">
+<i class="fa-solid fa-print me-1"></i>
+Print
+</button>
+</div>
+
+</div>
+
+<!-- RESULT TABLE -->
+<section class="table-card">
+<div class="table-wrap">
+
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>ছবি</th>
+<th>বন্দির পরিচিতি</th>
+<th>বন্দি নম্বর</th>
+<th>NID</th>
+<th>শ্রেণী</th>
+<th>প্রকৃতি</th>
+<th>মোবাইল</th>
+<th>বর্তমান অবস্থা</th>
+<th>Reference</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="resultBody"></tbody>
+</table>
+
+<div class="empty-state" id="emptyState">
+<div class="empty-icon">
+<i class="fa-solid fa-magnifying-glass"></i>
+</div>
+<h4>কোনো তথ্য পাওয়া যায়নি</h4>
+<p>উপরের Search Box ব্যবহার করে বন্দির তথ্য অনুসন্ধান করুন।</p>
+</div>
+
+</div>
+</section>
+
+<!-- DETAILS -->
+<section class="details-card" id="detailsCard">
+
+<div class="details-header">
+<div class="details-title">
+<i class="fa-solid fa-id-card me-1"></i>
+বন্দির পূর্ণ তথ্য
+</div>
+
+<div class="d-flex gap-1">
+<button class="result-btn" id="btnDetailPrint">
+<i class="fa-solid fa-print"></i>
+</button>
+<button class="result-btn" id="btnCloseDetails">
+<i class="fa-solid fa-xmark"></i>
+</button>
+</div>
+</div>
+
+<div class="details-body" id="detailsBody"></div>
+
+</section>
+
+<footer>
+© 2026 Engr Nizam Uddin — Prisoner Management System (PMS) · সর্বস্বত্ব সংরক্ষিত
+</footer>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+
+"use strict";
+
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+
+let currentResults=[];
+let selectedType="all";
+
+/* =========================================================
+TYPE SELECT
+========================================================= */
+
+$$(".type-btn").forEach(btn=>{
+btn.addEventListener("click",()=>{
+$$(".type-btn").forEach(x=>x.classList.remove("active"));
+btn.classList.add("active");
+selectedType=btn.dataset.type;
+performSearch();
+});
+});
+
+/* =========================================================
+ADVANCED FILTER
+========================================================= */
+
+$("#btnAdvanced").addEventListener("click",()=>{
+const bar=$("#filterBar");
+bar.style.display=bar.style.display==="block"?"none":"block";
+});
+
+/* =========================================================
+LOAD DATA
+========================================================= */
+
+function loadPrisoners(){
+
+let list=[];
+
+try{
+
+const saved=JSON.parse(
+localStorage.getItem("pmsPrisoners")||"[]"
+);
+
+if(Array.isArray(saved)) list=saved;
+
+}catch(e){}
+
+try{
+
+const draft=JSON.parse(
+localStorage.getItem("pmsPrisonerDraft")||"null"
+);
+
+if(draft && !list.length)
+list=[draft];
+
+}catch(e){}
+
+return list;
+}
+
+/* =========================================================
+NORMALIZE
+========================================================= */
+
+function normalize(data){
+
+const f=data.fields||data;
+
+return{
+raw:data,
+reference:data.reference||f.reference||"",
+nameBn:f.nameBn||"",
+nameEn:f.nameEn||"",
+aliasName:f.aliasName||"",
+gender:f.gender||"",
+religion:f.religion||"",
+nationality:f.nationality||"",
+profession:f.profession||"",
+mobile:f.primaryMobile||"",
+altMobiles:f.altMobiles||"",
+nid:f.nid||"",
+birthRegNo:f.birthRegNo||"",
+passportNo:f.passportNo||"",
+detaineeClass:f.detaineeClass||"",
+detaineeId:f.detaineeId||"",
+detaineeNature:f.detaineeNature||"",
+dob:f.dob||"",
+height:f.height||"",
+weight:f.weight||"",
+district:f.curDistrict||"",
+division:f.curDivision||"",
+upazila:f.curUpazila||"",
+photo:data.photo||f.photo||"",
+cases:data.cases||[],
+family:data.grids?.family||[],
+medical:data.grids?.medical||[],
+calls:data.grids?.calls||[],
+visitors:data.grids?.visitors||[],
+transfers:data.grids?.transfers||[],
+remands:data.grids?.remands||[]
+};
+
+}
+
+/* =========================================================
+MATCH
+========================================================= */
+
+function matches(p,q){
+
+if(!q)return true;
+
+q=q.toLowerCase().trim();
+
+const map={
+name:[
+p.nameBn,p.nameEn,p.aliasName
+],
+nid:[p.nid],
+prisoner:[p.detaineeId],
+mobile:[p.mobile,p.altMobiles],
+case:[
+...p.cases.map(x=>Object.values(x).join(" "))
+],
+reference:[p.reference],
+biometric:[
+p.photo,
+p.raw?.biometric,
+p.raw?.biometrics
+],
+all:[
+p.nameBn,p.nameEn,p.aliasName,
+p.nid,p.detaineeId,
+p.mobile,p.altMobiles,
+p.reference,
+p.detaineeClass,p.detaineeNature,
+p.gender,p.district,p.division,
+...p.cases.map(x=>Object.values(x).join(" ")),
+...p.family.map(x=>Object.values(x).join(" "))
+]
+};
+
+return(map[selectedType]||map.all)
+.join(" ")
+.toLowerCase()
+.includes(q);
+
+}
+
+/* =========================================================
+FILTER
+========================================================= */
+
+function applyFilters(p){
+
+const cls=$("#filterClass").value;
+const nature=$("#filterNature").value;
+const gender=$("#filterGender").value;
+const district=$("#filterDistrict").value.trim().toLowerCase();
+
+if(cls && p.detaineeClass!==cls)return false;
+if(nature && p.detaineeNature!==nature)return false;
+if(gender && p.gender!==gender)return false;
+
+if(
+district &&
+!p.district.toLowerCase().includes(district)
+)return false;
+
+return true;
+
+}
+
+/* =========================================================
+SEARCH
+========================================================= */
+
+function performSearch(){
+
+const q=$("#searchInput").value;
+const data=loadPrisoners()
+.map(normalize)
+.filter(p=>matches(p,q))
+.filter(applyFilters);
+
+currentResults=data;
+renderResults(data);
+
+}
+
+/* =========================================================
+RENDER
+========================================================= */
+
+function renderResults(data){
+
+const body=$("#resultBody");
+const empty=$("#emptyState");
+
+$("#resultCount").textContent=data.length;
+
+if(!data.length){
+
+body.innerHTML="";
+empty.style.display="block";
+return;
+
+}
+
+empty.style.display="none";
+
+body.innerHTML=data.map((p,i)=>`
+
+<tr>
+
+<td>${i+1}</td>
+
+<td>
+<div class="photo">
+${
+p.photo
+?`<img src="${escapeAttr(p.photo)}">`
+:`<i class="fa-solid fa-user"></i>`
+}
+</div>
+</td>
+
+<td>
+<div class="prisoner-name">
+${escapeHtml(p.nameBn||"নাম নেই")}
+</div>
+<div class="prisoner-en">
+${escapeHtml(p.nameEn||"")}
+</div>
+</td>
+
+<td>
+<strong>${escapeHtml(p.detaineeId||"-")}</strong>
+</td>
+
+<td>${escapeHtml(p.nid||"-")}</td>
+
+<td>${escapeHtml(p.detaineeClass||"-")}</td>
+
+<td>
+${escapeHtml(p.detaineeNature||"-")}
+</td>
+
+<td>${escapeHtml(p.mobile||"-")}</td>
+
+<td>
+<span class="badge-status ${statusClass(p.detaineeClass)}">
+${escapeHtml(p.detaineeClass||"অজানা")}
+</span>
+</td>
+
+<td>${escapeHtml(p.reference||"-")}</td>
+
+<td>
+<div class="action-buttons">
+
+<button class="row-btn view-btn"
+title="পূর্ণ তথ্য"
+data-view="${i}">
+<i class="fa-regular fa-eye"></i>
+</button>
+
+<button class="row-btn edit-btn"
+title="Edit"
+data-edit="${i}">
+<i class="fa-solid fa-pen"></i>
+</button>
+
+<button class="row-btn print-btn"
+title="Print"
+data-print="${i}">
+<i class="fa-solid fa-print"></i>
+</button>
+
+</div>
+</td>
+
+</tr>
+
+`).join("");
+
+$$("[data-view]").forEach(btn=>{
+btn.addEventListener("click",()=>{
+showDetails(currentResults[Number(btn.dataset.view)]);
+});
+});
+
+$$("[data-edit]").forEach(btn=>{
+btn.addEventListener("click",()=>{
+editPrisoner(currentResults[Number(btn.dataset.edit)]);
+});
+});
+
+$$("[data-print]").forEach(btn=>{
+btn.addEventListener("click",()=>{
+printPrisoner(currentResults[Number(btn.dataset.print)]);
+});
+});
+
+}
+
+/* =========================================================
+STATUS
+========================================================= */
+
+function statusClass(x){
+
+if(x==="হাজতি")return"badge-hajati";
+if(x==="কয়েদী")return"badge-koidi";
+if(x==="রিমান্ড")return"badge-remand";
+return"badge-transfer";
+
+}
+
+/* =========================================================
+FULL DETAILS
+========================================================= */
+
+function showDetails(p){
+
+const card=$("#detailsCard");
+const body=$("#detailsBody");
+
+card.style.display="block";
+
+body.innerHTML=`
+
+<div class="profile">
+
+<div class="profile-photo">
+
+${
+p.photo
+?`<img src="${escapeAttr(p.photo)}">`
+:`<i class="fa-solid fa-user fa-2x"></i>`
+}
+
+</div>
+
+<div>
+
+<div class="profile-name">
+${escapeHtml(p.nameBn||"নাম নেই")}
+</div>
+
+<div class="profile-en">
+${escapeHtml(p.nameEn||"")}
+</div>
+
+<div class="profile-meta">
+
+<span class="meta">
+<i class="fa-solid fa-id-card"></i>
+${escapeHtml(p.detaineeId||"-")}
+</span>
+
+<span class="meta">
+<i class="fa-solid fa-fingerprint"></i>
+Biometric
+</span>
+
+<span class="meta">
+<i class="fa-solid fa-scale-balanced"></i>
+${p.cases.length} মামলা
+</span>
+
+<span class="meta">
+<i class="fa-solid fa-people-group"></i>
+${p.family.length} পরিবার
+</span>
+
+</div>
+
+</div>
+</div>
+
+<div class="detail-grid">
+
+${detail("রেফারেন্স",p.reference)}
+${detail("NID",p.nid)}
+${detail("জন্ম তারিখ",p.dob)}
+${detail("লিঙ্গ",p.gender)}
+${detail("ধর্ম",p.religion)}
+${detail("নাগরিকত্ব",p.nationality)}
+${detail("পেশা",p.profession)}
+${detail("মোবাইল",p.mobile)}
+${detail("বন্দির শ্রেণী",p.detaineeClass)}
+${detail("বন্দির প্রকৃতি",p.detaineeNature)}
+${detail("উচ্চতা",p.height)}
+${detail("ওজন",p.weight)}
+${detail("জন্ম নিবন্ধন",p.birthRegNo)}
+${detail("পাসপোর্ট",p.passportNo)}
+${detail("বর্তমান জেলা",p.district)}
+${detail("বর্তমান বিভাগ",p.division)}
+
+</div>
+
+<div class="info-tabs">
+
+<button class="info-tab active" data-tab="cases">
+মামলা (${p.cases.length})
+</button>
+
+<button class="info-tab" data-tab="family">
+পরিবার (${p.family.length})
+</button>
+
+<button class="info-tab" data-tab="medical">
+মেডিকেল (${p.medical.length})
+</button>
+
+<button class="info-tab" data-tab="calls">
+কল (${p.calls.length})
+</button>
+
+<button class="info-tab" data-tab="visitors">
+ভিজিটর (${p.visitors.length})
+</button>
+
+<button class="info-tab" data-tab="transfers">
+বদলী (${p.transfers.length})
+</button>
+
+<button class="info-tab" data-tab="remands">
+রিমান্ড (${p.remands.length})
+</button>
+
+</div>
+
+<div class="tab-content" id="tabContent"></div>
+
+`;
+
+renderTab("cases",p.cases);
+
+$$(".info-tab").forEach(tab=>{
+tab.addEventListener("click",()=>{
+
+$$(".info-tab").forEach(x=>x.classList.remove("active"));
+tab.classList.add("active");
+
+renderTab(
+tab.dataset.tab,
+p[tab.dataset.tab]||[]
+);
+
+});
+});
+
+card.scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
+
+}
+
+/* =========================================================
+DETAIL HELPER
+========================================================= */
+
+function detail(label,value){
+
+return`
+<div class="detail-item">
+<div class="detail-label">${label}</div>
+<div class="detail-value">${escapeHtml(value||"-")}</div>
+</div>`;
+}
+
+/* =========================================================
+TAB RENDER
+========================================================= */
+
+function renderTab(type,data){
+
+const host=$("#tabContent");
+
+if(!data.length){
+
+host.innerHTML=`
+<div class="empty-state" style="padding:25px">
+<i class="fa-regular fa-folder-open"></i>
+<div style="font-size:11px;margin-top:5px">
+এই বিভাগে কোনো তথ্য নেই।
+</div>
+</div>`;
+return;
+
+}
+
+const keys=Object.keys(data[0]);
+
+host.innerHTML=`
+
+<div class="table-wrap">
+
+<table class="info-table">
+
+<thead>
+<tr>
+${keys.map(k=>`<th>${escapeHtml(k)}</th>`).join("")}
+</tr>
+</thead>
+
+<tbody>
+
+${data.map(row=>`
+
+<tr>
+${keys.map(k=>
+`<td>${escapeHtml(row[k]??"")}</td>`
+).join("")}
+</tr>
+
+`).join("")}
+
+</tbody>
+
+</table>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+EDIT
+========================================================= */
+
+function editPrisoner(p){
+
+try{
+
+localStorage.setItem(
+"pmsEditPrisoner",
+JSON.stringify(p.raw)
+);
+
+window.open("createid.html","_blank");
+
+}catch(e){
+
+alert("তথ্য Edit করার সময় সমস্যা হয়েছে।");
+
+}
+
+}
+
+/* =========================================================
+PRINT
+========================================================= */
+
+function printPrisoner(p){
+
+const w=window.open("","_blank");
+
+if(!w){
+alert("Popup blocked. Browser popup allow করুন।");
+return;
+}
+
+w.document.write(`
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<title>PMS — ${escapeHtml(p.nameBn)}</title>
+<style>
+body{font-family:Arial,sans-serif;padding:25px;color:#222}
+h2{margin-bottom:3px}
+.small{font-size:11px;color:#666;margin-bottom:15px}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #ddd;padding:7px;font-size:11px}
+th{background:#f5f5f5;text-align:left;width:25%}
+</style>
+</head>
+<body>
+
+<h2>PMS — বন্দির তথ্য</h2>
+<div class="small">
+Reference: ${escapeHtml(p.reference)}
+</div>
+
+<table>
+
+<tr><th>নাম</th><td>${escapeHtml(p.nameBn)}</td></tr>
+<tr><th>Name</th><td>${escapeHtml(p.nameEn)}</td></tr>
+<tr><th>বন্দি নম্বর</th><td>${escapeHtml(p.detaineeId)}</td></tr>
+<tr><th>NID</th><td>${escapeHtml(p.nid)}</td></tr>
+<tr><th>শ্রেণী</th><td>${escapeHtml(p.detaineeClass)}</td></tr>
+<tr><th>প্রকৃতি</th><td>${escapeHtml(p.detaineeNature)}</td></tr>
+<tr><th>লিঙ্গ</th><td>${escapeHtml(p.gender)}</td></tr>
+<tr><th>জন্ম তারিখ</th><td>${escapeHtml(p.dob)}</td></tr>
+<tr><th>মোবাইল</th><td>${escapeHtml(p.mobile)}</td></tr>
+<tr><th>বর্তমান জেলা</th><td>${escapeHtml(p.district)}</td></tr>
+<tr><th>Reference</th><td>${escapeHtml(p.reference)}</td></tr>
+
+</table>
+
+<script>
+window.print();
+<\/script>
+
+</body>
+</html>
+`);
+
+w.document.close();
+
+}
+
+/* =========================================================
+SEARCH BUTTON
+========================================================= */
+
+$("#btnSearch").addEventListener(
+"click",
+performSearch
+);
+
+$("#searchInput").addEventListener(
+"keydown",
+e=>{
+if(e.key==="Enter")performSearch();
+}
+);
+
+/* =========================================================
+CLEAR
+========================================================= */
+
+$("#btnClear").addEventListener("click",()=>{
+
+$("#searchInput").value="";
+
+$$(".type-btn").forEach(x=>x.classList.remove("active"));
+
+document
+.querySelector('[data-type="all"]')
+.classList.add("active");
+
+selectedType="all";
+
+$("#resultBody").innerHTML="";
+$("#resultCount").textContent="0";
+$("#emptyState").style.display="block";
+
+$("#detailsCard").style.display="none";
+
+});
+
+/* =========================================================
+FILTER BUTTONS
+========================================================= */
+
+$("#btnApplyFilter").addEventListener(
+"click",
+performSearch
+);
+
+$("#btnResetFilter").addEventListener(
+"click",
+()=>{
+
+$("#filterClass").value="";
+$("#filterNature").value="";
+$("#filterGender").value="";
+$("#filterDistrict").value="";
+$("#filterFrom").value="";
+$("#filterTo").value="";
+
+performSearch();
+
+}
+);
+
+/* =========================================================
+CLOSE DETAILS
+========================================================= */
+
+$("#btnCloseDetails").addEventListener(
+"click",
+()=>{
+$("#detailsCard").style.display="none";
+}
+);
+
+$("#btnDetailPrint").addEventListener(
+"click",
+()=>window.print()
+);
+
+/* =========================================================
+EXPORT
+========================================================= */
+
+$("#btnExport").addEventListener(
+"click",
+()=>{
+
+if(!currentResults.length){
+
+alert("Export করার মতো কোনো তথ্য নেই।");
+return;
+
+}
+
+const rows=currentResults.map(p=>({
+Reference:p.reference,
+Name_Bangla:p.nameBn,
+Name_English:p.nameEn,
+Prisoner_ID:p.detaineeId,
+NID:p.nid,
+Category:p.detaineeClass,
+Nature:p.detaineeNature,
+Gender:p.gender,
+Mobile:p.mobile,
+District:p.district
+}));
+
+const header=Object.keys(rows[0]).join(",");
+const body=rows.map(r=>
+Object.values(r)
+.map(v=>`"${String(v??"").replace(/"/g,'""')}"`)
+.join(",")
+).join("\n");
+
+const blob=new Blob(
+[header+"\n"+body],
+{type:"text/csv;charset=utf-8;"}
+);
+
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+a.href=url;
+a.download="PMS_Search_Result.csv";
+a.click();
+
+URL.revokeObjectURL(url);
+
+}
+);
+
+/* =========================================================
+PRINT RESULTS
+========================================================= */
+
+$("#btnPrintResults").addEventListener(
+"click",
+()=>window.print()
+);
+
+/* =========================================================
+ESCAPE
+========================================================= */
+
+function escapeHtml(v){
+
+return String(v??"")
+.replace(/[&<>"']/g,ch=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+}[ch]));
+
+}
+
+function escapeAttr(v){
+return escapeHtml(v);
+}
+
+/* =========================================================
+INITIAL
+========================================================= */
+
+renderResults([]);
+
+console.log(
+"PMS Smart Search initialized."
+);
+
+});
+</script>
+
+</body>
+</html>
+

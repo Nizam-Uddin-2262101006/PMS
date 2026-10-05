@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMIS | Database Manager</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sidebar-bg:#0d1830;
+  --sidebar-bg-2:#0a1224;
+  --sidebar-text:#93a4c3;
+  --sidebar-text-active:#ffffff;
+  --accent:#2563eb;
+  --accent-dark:#1d4ed8;
+  --accent-soft:#eaf1ff;
+  --bg:#eef1f6;
+  --card-bg:#ffffff;
+  --border:#dfe3ea;
+  --text-primary:#1c2536;
+  --text-secondary:#68718a;
+  --success:#15803d;
+  --success-soft:#e9f8ef;
+  --danger:#c62828;
+  --danger-soft:#fdecec;
+  --warning:#b45309;
+  --warning-soft:#fef6e7;
+  --radius:10px;
+  --radius-sm:6px;
+  --shadow-sm:0 1px 2px rgba(16,24,40,.06);
+  --shadow-md:0 4px 14px rgba(16,24,40,.08);
+  --header-h:60px;
+  --actionbar-h:52px;
+  --sidebar-w:248px;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text-primary);
+  font-family:"Inter","Noto Sans Bengali","Segoe UI",system-ui,sans-serif;
+  font-size:14px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--accent-soft);} 
+::-webkit-scrollbar{width:9px;height:9px;}
+::-webkit-scrollbar-thumb{background:#c3cad6;border-radius:20px;}
+::-webkit-scrollbar-thumb:hover{background:#a7b0c0;}
+
+/* ===== App Shell ===== */
+.app-shell{display:flex;min-height:100vh;}
+
+/* ===== Sidebar ===== */
+.sidebar{
+  width:var(--sidebar-w);
+  flex-shrink:0;
+  background:linear-gradient(180deg,var(--sidebar-bg) 0%,var(--sidebar-bg-2) 100%);
+  color:var(--sidebar-text);
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  z-index:1030;
+}
+.sidebar .brand{
+  display:flex;align-items:center;gap:10px;
+  padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08);
+}
+.sidebar .brand i{color:var(--accent);font-size:20px;}
+.sidebar .brand-text{line-height:1.15;}
+.sidebar .brand-text b{color:#fff;font-size:15px;display:block;}
+.sidebar .brand-text span{font-size:11px;color:var(--sidebar-text);} 
+.sidebar nav{padding:12px;}
+.sidebar .nav-section-label{
+  font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+  color:#556183;padding:14px 12px 6px;
+}
+.sidebar a.nav-link{
+  display:flex;align-items:center;gap:10px;
+  color:var(--sidebar-text);padding:9px 12px;border-radius:var(--radius-sm);
+  font-size:13.5px;font-weight:500;margin-bottom:2px;transition:background .12s,color .12s;
+}
+.sidebar a.nav-link i{width:16px;text-align:center;font-size:14px;}
+.sidebar a.nav-link:hover{background:rgba(255,255,255,.06);color:#fff;}
+.sidebar a.nav-link.active{background:var(--accent);color:#fff;box-shadow:var(--shadow-sm);}
+.sidebar-collapse-btn{
+  color:var(--sidebar-text);background:transparent;border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--radius-sm);padding:6px 10px;font-size:12px;
+}
+
+/* ===== Main ===== */
+.main-wrapper{flex:1;min-width:0;display:flex;flex-direction:column;}
+
+.topbar{
+  position:sticky;top:0;z-index:1020;
+  height:var(--header-h);background:var(--card-bg);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;box-shadow:var(--shadow-sm);
+}
+.topbar .page-title{font-size:16px;font-weight:700;color:var(--text-primary);} 
+.topbar .breadcrumb-line{font-size:12px;color:var(--text-secondary);} 
+.topbar .status-pill{
+  font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:20px;
+  background:var(--warning-soft);color:var(--warning);border:1px solid #f3dcae;
+}
+.topbar-right{display:flex;align-items:center;gap:14px;}
+.hdr-icon-btn{
+  width:34px;height:34px;border-radius:8px;border:1px solid var(--border);
+  background:#fff;color:var(--text-secondary);display:flex;align-items:center;justify-content:center;
+  font-size:14px;
+}
+.hdr-user{display:flex;align-items:center;gap:8px;}
+.hdr-user .avatar{
+  width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;
+}
+.hdr-user .who b{display:block;font-size:12.5px;line-height:1.2;}
+.hdr-user .who span{font-size:11px;color:var(--text-secondary);}
+
+.action-bar{
+  position:sticky;top:var(--header-h);z-index:1015;
+  height:var(--actionbar-h);background:#fbfcfe;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;padding:0 20px;overflow-x:auto;
+}
+.action-bar::-webkit-scrollbar{height:0;}
+.btn-ent{
+  border:1px solid var(--border);background:#fff;color:var(--text-primary);
+  font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:var(--radius-sm);
+  display:inline-flex;align-items:center;gap:7px;white-space:nowrap;transition:.12s;
+}
+.btn-ent i{font-size:12px;}
+.btn-ent:hover{border-color:#c7cedb;background:#f6f8fb;}
+.btn-ent-primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+.btn-ent-primary:hover{background:var(--accent-dark);border-color:var(--accent-dark);}
+.btn-ent-success{background:var(--success);border-color:var(--success);color:#fff;}
+.btn-ent-success:hover{filter:brightness(.95);} 
+.btn-ent-danger-outline{color:var(--danger);border-color:#f0c2c2;}
+.btn-ent-danger-outline:hover{background:var(--danger-soft);} 
+.action-bar-divider{width:1px;height:24px;background:var(--border);margin:0 4px;flex-shrink:0;}
+
+.content{padding:22px;max-width:1400px;margin:0 auto;width:100%;}
+
+/* ===== Enterprise Card ===== */
+.ent-card{
+  background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow-sm);margin-bottom:20px;
+}
+.ent-card-header{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+  padding:16px 20px;border-bottom:1px solid var(--border);
+}
+.ent-card-header-left{display:flex;gap:12px;}
+.sec-badge{
+  flex-shrink:0;width:34px;height:34px;border-radius:9px;background:var(--accent-soft);
+  color:var(--accent);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;
+}
+.ent-card-title{font-size:15px;font-weight:700;color:var(--text-primary);margin:0;}
+.ent-card-desc{font-size:12.5px;color:var(--text-secondary);margin-top:2px;}
+.ent-card-header-actions{display:flex;gap:8px;flex-shrink:0;}
+.ent-card-body{padding:20px;}
+
+.section-toggle{
+  background:transparent;border:none;color:var(--text-secondary);font-size:14px;
+  width:28px;height:28px;border-radius:6px;
+}
+.section-toggle:hover{background:var(--bg);} 
+.ent-card.collapsed .ent-card-body{display:none;} 
+.ent-card.collapsed .section-toggle i{transform:rotate(-90deg);} 
+.section-toggle i{transition:transform .15s;}
+
+/* ===== Form ===== */
+.f-group{margin-bottom:14px;}
+.f-label{
+  display:block;font-size:12.5px;font-weight:600;color:var(--text-primary);margin-bottom:5px;
+}
+.f-label .req{color:var(--danger);margin-left:2px;}
+.f-control,select.f-control,textarea.f-control{
+  width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:8px 10px;font-size:13px;background:#fff;color:var(--text-primary);
+  transition:border-color .12s,box-shadow .12s;
+}
+.f-control:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);} 
+.f-control.is-invalid{border-color:var(--danger);} 
+.f-control.is-invalid:focus{box-shadow:0 0 0 3px var(--danger-soft);} 
+.f-error{font-size:11.5px;color:var(--danger);margin-top:4px;display:none;} 
+.f-error.show{display:block;} 
+.f-hint{font-size:11px;color:var(--text-secondary);margin-top:4px;}
+
+/* Mandatory Field Error Highlighting */
+.f-group.field-error .f-control{
+  border-color:var(--danger);
+  background-color:rgba(198, 40, 40, 0.03);
+  box-shadow:inset 0 0 0 1px rgba(198, 40, 40, 0.2);
+}
+.f-group.field-error .f-control:focus{
+  border-color:var(--danger);
+  box-shadow:0 0 0 3px var(--danger-soft);
+}
+.f-group.field-error .f-label{
+  color:var(--danger);
+  font-weight:700;
+} 
+
+.addr-box{border:1px solid var(--border);border-radius:var(--radius-sm);background:#fbfcfe;padding:16px;height:100%;} 
+.addr-box h4{font-size:13px;font-weight:700;margin:0 0 12px;padding-bottom:9px;border-bottom:1px solid var(--border);color:var(--text-primary);} 
+
+/* ===== DataGrid ===== */
+.grid-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap;} 
+.grid-search{position:relative;max-width:260px;flex:1;min-width:180px;} 
+.grid-search i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-secondary);font-size:12px;} 
+.grid-search input{padding-left:30px;} 
+.grid-toolbar-actions{display:flex;gap:8px;} 
+.icon-btn-sm{
+  width:30px;height:30px;border-radius:6px;border:1px solid var(--border);background:#fff;
+  color:var(--text-secondary);font-size:12px;display:inline-flex;align-items:center;justify-content:center;
+}
+.icon-btn-sm:hover{background:var(--bg);} 
+
+.table-wrap{border:1px solid var(--border);border-radius:var(--radius-sm);overflow:auto;max-height:420px;} 
+table.ent-table{width:100%;border-collapse:collapse;font-size:12.8px;min-width:640px;} 
+table.ent-table thead th{
+  position:sticky;top:0;background:#f6f8fb;color:var(--text-primary);font-weight:700;
+  text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;
+  user-select:none;z-index:1;
+}
+table.ent-table thead th i{font-size:10px;margin-left:5px;color:var(--text-secondary);} 
+table.ent-table tbody td{padding:9px 12px;border-bottom:1px solid #eef0f4;color:var(--text-primary);white-space:nowrap;} 
+table.ent-table tbody tr:hover{background:#f8fafc;} 
+table.ent-table tbody tr:last-child td{border-bottom:none;} 
+.row-actions{display:flex;gap:6px;} 
+.row-actions button{
+  border:1px solid var(--border);background:#fff;border-radius:6px;width:26px;height:26px;font-size:11px;
+}
+.row-actions .ra-edit{color:var(--accent);} 
+.row-actions .ra-view{color:var(--text-secondary);} 
+.row-actions .ra-del{color:var(--danger);} 
+.grid-empty{padding:34px 10px;text-align:center;color:var(--text-secondary);font-size:12.8px;} 
+.grid-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;flex-wrap:wrap;gap:8px;} 
+.grid-count{font-size:12px;color:var(--text-secondary);} 
+.pagination-ent{display:flex;gap:4px;} 
+.pagination-ent button{
+  width:28px;height:28px;border:1px solid var(--border);background:#fff;border-radius:6px;font-size:12px;color:var(--text-primary);
+}
+.pagination-ent button.active{background:var(--accent);color:#fff;border-color:var(--accent);} 
+.pagination-ent button:disabled{opacity:.4;} 
+
+/* ===== Case Card ===== */
+.case-card{border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:14px;background:#fbfcfe;} 
+.case-card-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);} 
+.case-card-head-left{display:flex;align-items:center;gap:10px;} 
+.case-num-badge{background:var(--accent);color:#fff;font-size:11.5px;font-weight:700;border-radius:6px;padding:3px 9px;} 
+.case-title-input{border:none;background:transparent;font-weight:700;font-size:13.5px;color:var(--text-primary);width:220px;} 
+.case-title-input:focus{outline:none;} 
+.case-card-head-actions{display:flex;gap:6px;} 
+.case-card-body{padding:16px;} 
+.case-card.collapsed .case-card-body{display:none;} 
+.grid-card-list{display:grid;gap:10px;} 
+.grid-card-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid rgba(15,23,42,.05);} 
+.grid-card-row:last-child{border-bottom:none;} 
+.grid-card-row strong{font-size:13px;color:var(--text-secondary);min-width:34%;} 
+.grid-card-row span{font-size:13px;color:var(--text-primary);text-align:right;word-break:break-word;max-width:65%;} 
+.subgroup-label{
+  font-size:11.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.03em;
+  margin:16px 0 10px;padding-top:12px;border-top:1px dashed var(--border);
+}
+.case-card-body .subgroup-label:first-child{margin-top:0;padding-top:0;border-top:none;} 
+
+/* ===== Badges / Toast ===== */
+.approval-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;} 
+.approval-badge.pending{background:var(--warning-soft);color:var(--warning);} 
+.approval-badge.approved{background:var(--success-soft);color:var(--success);} 
+.approval-badge.rejected{background:var(--danger-soft);color:var(--danger);} 
+.toast-ent{
+  position:fixed;bottom:22px;right:22px;z-index:2000;background:var(--text-primary);color:#fff;
+  padding:12px 18px;border-radius:var(--radius-sm);font-size:13px;box-shadow:var(--shadow-md);
+  display:flex;align-items:center;gap:10px;transform:translateY(20px);opacity:0;transition:.2s;pointer-events:none;
+}
+.toast-ent.show{transform:translateY(0);opacity:1;} 
+.toast-ent.success i{color:#4ade80;} 
+.toast-ent.error i{color:#f87171;} 
+
+/* ===== Biometric ===== */
+.bio-slot{
+  border:1.5px dashed var(--border);border-radius:var(--radius-sm);background:#fbfcfe;
+  text-align:center;padding:14px 10px;
+}
+.bio-slot .bio-preview{
+  width:100%;aspect-ratio:1/1;max-width:120px;margin:0 auto 10px;background:#eef1f6;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;color:#aab3c2;font-size:26px;border:1px solid var(--border);
+}
+.bio-slot p{font-size:11.5px;font-weight:600;color:var(--text-primary);margin:0 0 8px;} 
+.bio-slot .btn-ent{width:100%;justify-content:center;font-size:11.5px;padding:6px 8px;} 
+.fp-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;} 
+@media (max-width:768px){.fp-grid{grid-template-columns:repeat(2,1fr);}} 
+
+/* ===== Modal ===== */
+.modal-content{border-radius:var(--radius);border:none;} 
+.modal-header{border-bottom:1px solid var(--border);padding:16px 20px;} 
+.modal-title{font-size:15px;font-weight:700;} 
+.modal-subtitle{font-size:12px;color:var(--text-secondary);margin-top:3px;} 
+.modal-body{padding:20px;} 
+.modal-footer{border-top:1px solid var(--border);padding:14px 20px;} 
+.biometric-modal-card{overflow:hidden;border:1px solid #dfe6f5;} 
+.biometric-modal-header{background:linear-gradient(90deg,#f5f8ff 0%,#eef4ff 100%);border-bottom:1px solid #e2eafc;} 
+.biometric-modal-footer{background:#fbfcfe;} 
+.capture-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;} 
+.capture-card{border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;background:#fcfdff;} 
+.capture-card h6{font-size:13px;font-weight:700;margin:0 0 6px;color:var(--text-primary);} 
+.capture-card p{font-size:12px;color:var(--text-secondary);margin:0 0 10px;line-height:1.55;} 
+.capture-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:700;} 
+.capture-preview{border:1px dashed var(--border);border-radius:var(--radius-sm);padding:16px;text-align:center;background:#f8faff;min-height:128px;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);} 
+.capture-preview i{font-size:28px;color:var(--accent);} 
+.capture-alert{border:1px solid #e1e8f6;border-radius:var(--radius-sm);padding:12px 13px;background:#f7faff;color:var(--text-secondary);font-size:12px;display:flex;gap:10px;align-items:flex-start;} 
+.capture-alert i{font-size:14px;color:var(--accent);margin-top:2px;} 
+.capture-pill-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;} 
+.capture-pill-list span{padding:4px 9px;border-radius:999px;background:#eef5ff;color:#3d5bd9;font-size:11px;font-weight:600;} 
+@media (max-width:768px){.capture-grid{grid-template-columns:1fr;}} 
+
+@media (max-width:991px){
+  .sidebar{position:fixed;left:-260px;transition:left .18s;}
+  .sidebar.open{left:0;}
+  .fp-grid{grid-template-columns:repeat(3,1fr);}
+}
+@media print{
+  .sidebar,.topbar,.action-bar,.ent-card-header-actions,.row-actions,.grid-toolbar,.pagination-ent{display:none !important;}
+  .content{padding:0;}
+  .ent-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;}
+}
+
+
+</style>
+</head>
+<body>
+<div class="app-shell">
+  
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="hdr-icon-btn d-lg-none" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="page-title">লোকাল ডাটাবেস</div>
+          <div class="breadcrumb-line">PMS &nbsp;/&nbsp; লোকাল ডাটাবেস &nbsp;/&nbsp; **</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="hdr-icon-btn" id="btnRefresh"><i class="fa-solid fa-arrows-rotate"></i></button>
+        <div class="hdr-user">
+          <div class="avatar">DB</div>
+          <div class="who"><b>ডাটাবেস</b><span>PostgreSQL</span></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="action-bar">
+      <button class="btn-ent btn-ent-primary" id="btnLoadRecords"><i class="fa-solid fa-table-list"></i> রেকর্ড লোড করুন</button>
+      <button class="btn-ent" id="btnNewRecord"><i class="fa-solid fa-plus"></i> নতুন রেকর্ড</button>
+      <div class="action-bar-divider"></div>
+      <button class="btn-ent btn-ent-success" id="btnViewSchema"><i class="fa-solid fa-code"></i> ডাটাবেস স্কিমা দেখুন</button>
+    </div>
+
+    <main class="content">
+      <section class="ent-card">
+        <div class="ent-card-header">
+          <div class="ent-card-header-left">
+            <div class="sec-badge">DB</div>
+            <div>
+              <h2 class="ent-card-title">বন্দি ডাটাবেস</h2>
+              <div class="ent-card-desc">সেভ করা বন্দিদের তালিকা ও স্কিমা দেখুন</div>
+            </div>
+          </div>
+        </div>
+        <div class="ent-card-body">
+          <div class="grid-toolbar">
+            <div class="grid-search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="search" id="searchDb" class="f-control" placeholder="নাম বা রেফারেন্স অনুসন্ধান করুন">
+            </div>
+            <div class="grid-toolbar-actions">
+              <button class="btn-ent btn-ent-primary" id="btnReload"><i class="fa-solid fa-sync"></i> রিফ্রেশ</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="ent-table" id="dbTable">
+              <thead>
+                <tr>
+                  <th>Ref No</th>
+                  <th>নাম</th>
+                  <th>শ্রেণী</th>
+                  <th>লিঙ্গ</th>
+                  <th>মোবাইল</th>
+                  <th>তৈরির তারিখ</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="ent-card" id="schemaCard">
+        <div class="ent-card-header">
+          <div class="ent-card-header-left">
+            <div class="sec-badge">SQL</div>
+            <div>
+              <h2 class="ent-card-title">Recommended PostgreSQL Schema</h2>
+              <div class="ent-card-desc">এই SQL স্কিমা ব্যবহার করে আপনার ডাটাবেস তৈরি করুন</div>
+            </div>
+          </div>
+        </div>
+        <div class="ent-card-body">
+          <pre style="white-space:pre-wrap;word-wrap:break-word;line-height:1.5;font-size:13px;">-- PostgreSQL schema for PMIS prisoner registration
+CREATE TABLE prisoners (
+  id SERIAL PRIMARY KEY,
+  ref_no TEXT UNIQUE NOT NULL,
+  detainee_class TEXT,
+  detainee_id TEXT,
+  detainee_nature TEXT,
+  name_bn TEXT,
+  name_en TEXT,
+  alias_name TEXT,
+  gender TEXT,
+  religion TEXT,
+  nationality TEXT,
+  profession TEXT,
+  primary_mobile TEXT,
+  alt_mobiles TEXT,
+  ident_mark TEXT,
+  height TEXT,
+  weight INTEGER,
+  dob DATE,
+  nid TEXT,
+  birth_reg_no TEXT,
+  passport_no TEXT,
+  dl_no TEXT,
+  tin TEXT,
+  vehicle_reg_no TEXT,
+  personal_remarks TEXT,
+  current_address JSONB,
+  permanent_address JSONB,
+  foreign_address JSONB,
+  address_remarks TEXT,
+  valuables TEXT,
+  received_items TEXT,
+  internal_report TEXT,
+  other_remarks TEXT,
+  family_members JSONB,
+  education_history JSONB,
+  medical_records JSONB,
+  call_logs JSONB,
+  visitor_logs JSONB,
+  transfers JSONB,
+  remands JSONB,
+  case_records JSONB,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+</pre>
+          <p style="margin-top:12px;color:#545f73;"> ***** </p>
+        </div>
+      </section>
+    </main>
+    <footer style="padding:14px 22px;font-size:11.5px;color:var(--text-secondary);text-align:center;">
+      &copy; 2026 Engr Nizam Uddin — Prisoner Management System (PMS)
+    </footer>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+  const dbTableBody = document.querySelector('#dbTable tbody');
+  const searchInput = document.getElementById('searchDb');
+  const btnLoadRecords = document.getElementById('btnLoadRecords');
+  const btnReload = document.getElementById('btnReload');
+  const btnRefresh = document.getElementById('btnRefresh');
+  const btnViewSchema = document.getElementById('btnViewSchema');
+  const schemaCard = document.getElementById('schemaCard');
+
+  async function loadRecords(){
+    if(!dbTableBody) return;
+    dbTableBody.innerHTML = '<tr><td colspan="7" style="padding:18px;text-align:center;color:#5a6070;">লোড হচ্ছে...</td></tr>';
+    try{
+      const response = await fetch('/api/prisoners');
+      const data = await response.json();
+      const filter = searchInput?.value?.toLowerCase() || '';
+      const rows = data
+        .filter(item => {
+          return !filter || (item.ref_no?.toLowerCase().includes(filter) || item.name_bn?.toLowerCase().includes(filter) || item.name_en?.toLowerCase().includes(filter));
+        })
+        .map(item => `
+          <tr>
+            <td>${item.ref_no || '-'}</td>
+            <td>${item.name_bn || item.name_en || '-'}</td>
+            <td>${item.detainee_class || '-'}</td>
+            <td>${item.gender || '-'}</td>
+            <td>${item.primary_mobile || '-'}</td>
+            <td>${new Date(item.created_at).toLocaleString('bn-BD', {year:'numeric',month:'short',day:'numeric'})}</td>
+            <td><button class="btn-ent btn-ent-sm" data-ref="${item.ref_no}">View</button></td>
+          </tr>
+        `).join('');
+      dbTableBody.innerHTML = rows || '<tr><td colspan="7" style="padding:18px;text-align:center;color:#5a6070;">কোন রেকর্ড পাওয়া যায়নি</td></tr>';
+    } catch(error){
+      dbTableBody.innerHTML = `<tr><td colspan="7" style="padding:18px;text-align:center;color:#c62828;">লোড করতে ব্যর্থ: ${error.message}</td></tr>`;
+    }
+  }
+
+  if(btnLoadRecords) btnLoadRecords.addEventListener('click', loadRecords);
+  if(btnReload) btnReload.addEventListener('click', loadRecords);
+  if(btnRefresh) btnRefresh.addEventListener('click', loadRecords);
+  if(btnViewSchema) btnViewSchema.addEventListener('click', ()=> schemaCard.scrollIntoView({behavior:'smooth'}));
+  if(searchInput) searchInput.addEventListener('input', loadRecords);
+  loadRecords();
+});
+
+</script>
+</body>
+</html>

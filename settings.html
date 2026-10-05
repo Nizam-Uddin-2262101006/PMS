@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PMS | System Settings</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+:root {
+    --primary: #1769aa;
+    --primary-dark: #0d4f82;
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --border: #e3e8ef;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --success: #16803c;
+    --warning: #b7791f;
+    --danger: #c53030;
+    --sidebar: #102a43;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.settings-page {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.settings-header {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 20px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.header-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    background: #e8f2fb;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 23px;
+}
+
+.header-title h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.header-title p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    border: 1px solid var(--border);
+    background: #fff;
+    padding: 9px 15px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.settings-container {
+    display: flex;
+    max-width: 1450px;
+    margin: auto;
+    padding: 24px;
+    gap: 22px;
+}
+
+/* =========================
+   SETTINGS SIDEBAR
+========================= */
+
+.settings-nav {
+    width: 245px;
+    min-width: 245px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    height: fit-content;
+}
+
+.nav-title {
+    padding: 12px 13px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #8a94a6;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+}
+
+.nav-item {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    padding: 11px 13px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    cursor: pointer;
+    color: #4b5563;
+    font-size: 13px;
+    text-align: left;
+    margin-bottom: 2px;
+}
+
+.nav-item i {
+    width: 19px;
+    font-size: 16px;
+}
+
+.nav-item:hover {
+    background: #f1f6fb;
+    color: var(--primary);
+}
+
+.nav-item.active {
+    background: #e8f2fb;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.settings-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.settings-section {
+    display: none;
+}
+
+.settings-section.active {
+    display: block;
+}
+
+.section-heading {
+    margin-bottom: 18px;
+}
+
+.section-heading h3 {
+    margin: 0;
+    font-size: 19px;
+}
+
+.section-heading p {
+    margin: 5px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 18px;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.card-title i {
+    color: var(--primary);
+    font-size: 17px;
+}
+
+.card-body {
+    padding: 19px;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 17px;
+}
+
+.form-grid.three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 12px;
+    color: #4b5563;
+    font-weight: 600;
+}
+
+input,
+select {
+    width: 100%;
+    border: 1px solid #d6dce5;
+    border-radius: 6px;
+    padding: 9px 11px;
+    font-size: 13px;
+    outline: none;
+    background: white;
+    color: #1f2937;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(23,105,170,.08);
+}
+
+input[readonly] {
+    background: #f7f8fa;
+    color: #667085;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+}
+
+.status.warning .status-dot {
+    background: var(--warning);
+}
+
+.status.danger .status-dot {
+    background: var(--danger);
+}
+
+/* =========================
+   INFO ROW
+========================= */
+
+.info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 0;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.info-row:last-child {
+    border-bottom: 0;
+}
+
+.info-label {
+    font-size: 13px;
+    color: #5d6675;
+}
+
+.info-value {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* =========================
+   DEVICE
+========================= */
+
+.device-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.device-left {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.device-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #eef5fb;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+}
+
+.device-name {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.device-id {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+/* =========================
+   TOGGLE
+========================= */
+
+.toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.toggle-row:last-child {
+    border-bottom: 0;
+}
+
+.toggle-info strong {
+    display: block;
+    font-size: 13px;
+}
+
+.toggle-info span {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.switch {
+    position: relative;
+    width: 42px;
+    height: 23px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    background: #cbd5e1;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.slider:before {
+    content: "";
+    position: absolute;
+    width: 17px;
+    height: 17px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: .2s;
+}
+
+.switch input:checked + .slider {
+    background: var(--primary);
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(19px);
+}
+
+/* =========================
+   SYSTEM STATUS
+========================= */
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.status-box {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.status-box i {
+    font-size: 20px;
+    color: var(--primary);
+}
+
+.status-box strong {
+    display: block;
+    font-size: 13px;
+    margin-top: 9px;
+}
+
+.status-box small {
+    display: block;
+    color: var(--muted);
+    margin-top: 3px;
+}
+
+/* =========================
+   DANGER
+========================= */
+
+.danger-zone {
+    border: 1px solid #f0caca;
+    background: #fffafa;
+    border-radius: 8px;
+    padding: 17px;
+}
+
+.danger-zone h4 {
+    margin: 0;
+    color: var(--danger);
+    font-size: 14px;
+}
+
+.danger-zone p {
+    font-size: 12px;
+    color: #7b4b4b;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.save-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 4px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width: 950px) {
+
+    .settings-container {
+        flex-direction: column;
+    }
+
+    .settings-nav {
+        width: 100%;
+        min-width: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px;
+    }
+
+    .nav-title {
+        width: 100%;
+    }
+
+    .nav-item {
+        width: auto;
+    }
+
+    .status-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 650px) {
+
+    .settings-header {
+        padding: 15px;
+    }
+
+    .header-actions {
+        display: none;
+    }
+
+    .settings-container {
+        padding: 12px;
+    }
+
+    .form-grid,
+    .form-grid.three {
+        grid-template-columns: 1fr;
+    }
+
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="settings-page">
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="settings-header">
+
+    <div class="header-left">
+
+        <div class="header-icon">
+            <i class="bi bi-gear-wide-connected"></i>
+        </div>
+
+        <div class="header-title">
+            <h2>System Settings</h2>
+            <p>Prisoner Management System — Configuration & Administration</p>
+        </div>
+
+    </div>
+
+    <div class="header-actions">
+
+        <button class="btn">
+            <i class="bi bi-arrow-clockwise"></i>
+            Refresh
+        </button>
+
+        <button class="btn btn-primary" onclick="saveSettings()">
+            <i class="bi bi-check2-circle"></i>
+            Save Changes
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="settings-container">
+
+<!-- =====================================================
+     SETTINGS NAVIGATION
+===================================================== -->
+
+<aside class="settings-nav">
+
+    <div class="nav-title">Configuration</div>
+
+    <button class="nav-item active" onclick="showSection('workstation', this)">
+        <i class="bi bi-pc-display"></i>
+        Workstation Setup
+    </button>
+
+    <button class="nav-item" onclick="showSection('account', this)">
+        <i class="bi bi-person-circle"></i>
+        User Account
+    </button>
+
+    <button class="nav-item" onclick="showSection('security', this)">
+        <i class="bi bi-shield-lock"></i>
+        Security
+    </button>
+
+    <button class="nav-item" onclick="showSection('biometric', this)">
+        <i class="bi bi-fingerprint"></i>
+        Biometric Devices
+    </button>
+
+    <button class="nav-item" onclick="showSection('network', this)">
+        <i class="bi bi-diagram-3"></i>
+        Network & Server
+    </button>
+
+    <button class="nav-item" onclick="showSection('application', this)">
+        <i class="bi bi-sliders"></i>
+        Application
+    </button>
+
+    <button class="nav-item" onclick="showSection('printer', this)">
+        <i class="bi bi-printer"></i>
+        Printer & Scanner
+    </button>
+
+    <button class="nav-item" onclick="showSection('notification', this)">
+        <i class="bi bi-bell"></i>
+        Notifications
+    </button>
+
+    <div class="nav-title">System</div>
+
+    <button class="nav-item" onclick="showSection('backup', this)">
+        <i class="bi bi-database-check"></i>
+        Data & Backup
+    </button>
+
+    <button class="nav-item" onclick="showSection('audit', this)">
+        <i class="bi bi-clock-history"></i>
+        Audit & Activity
+    </button>
+
+    <button class="nav-item" onclick="showSection('system', this)">
+        <i class="bi bi-info-circle"></i>
+        System Information
+    </button>
+
+    <button class="nav-item" onclick="showSection('about', this)">
+        <i class="bi bi-question-circle"></i>
+        About & Support
+    </button>
+
+</aside>
+
+
+<!-- =====================================================
+     CONTENT
+===================================================== -->
+
+<main class="settings-content">
+
+
+<!-- =====================================================
+     1. WORKSTATION
+===================================================== -->
+
+<section id="workstation" class="settings-section active">
+
+<div class="section-heading">
+    <h3>Workstation Setup</h3>
+    <p>Computer and workstation information used to access the PMS.</p>
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+    <div class="card-title">
+        <i class="bi bi-pc-display-horizontal"></i>
+        Computer Information
+    </div>
+
+    <span class="status">
+        <span class="status-dot"></span>
+        Online
+    </span>
+</div>
+
+<div class="card-body">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>Workstation Name</label>
+<input type="text" value="PMS-WORKSTATION-01">
+</div>
+
+<div class="form-group">
+<label>Computer Name</label>
+<input type="text" value="PMS-CLIENT-01" readonly>
+</div>
+
+<div class="form-group">
+<label>Operating System</label>
+<input type="text" value="Windows 11" readonly>
+</div>
+
+<div class="form-group">
+<label>OS Version</label>
+<input type="text" value="Windows 11 64-bit" readonly>
+</div>
+
+<div class="form-group">
+<label>Processor</label>
+<input type="text" value="Intel Core Processor" readonly>
+</div>
+
+<div class="form-group">
+<label>RAM</label>
+<input type="text" value="8 GB" readonly>
+</div>
+
+<div class="form-group">
+<label>MAC Address</label>
+<input type="text" value="XX-XX-XX-XX-XX-XX" readonly>
+</div>
+
+<div class="form-group">
+<label>Local IP Address</label>
+<input type="text" value="192.168.1.101" readonly>
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+    <div class="card-title">
+        <i class="bi bi-hdd-network"></i>
+        Workstation Services
+    </div>
+</div>
+
+<div class="card-body">
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Biometric Agent</strong>
+<span>Allow PMS to communicate with local biometric devices.</span>
+</div>
+
+<label class="switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Auto Start Agent</strong>
+<span>Start the biometric agent when Windows starts.</span>
+</div>
+
+<label class="switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Offline Mode</strong>
+<span>Allow temporary operation when server connection is unavailable.</span>
+</div>
+
+<label class="switch">
+<input type="checkbox">
+<span class="slider"></span>
+</label>
+</div>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     2. ACCOUNT
+===================================================== -->
+
+<section id="account" class="settings-section">
+
+<div class="section-heading">
+<h3>User Account</h3>
+<p>Current operator account and authorization information.</p>
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+<div class="card-title">
+<i class="bi bi-person-badge"></i>
+Account Information
+</div>
+</div>
+
+<div class="card-body">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>Full Name</label>
+<input type="text" value="System Operator">
+</div>
+
+<div class="form-group">
+<label>Username</label>
+<input type="text" value="operator01" readonly>
+</div>
+
+<div class="form-group">
+<label>Employee / User ID</label>
+<input type="text" value="PMS-USER-0001" readonly>
+</div>
+
+<div class="form-group">
+<label>Designation</label>
+<input type="text" value="System Operator">
+</div>
+
+<div class="form-group">
+<label>Office / Institution</label>
+<input type="text" value="PMS Administration">
+</div>
+
+<div class="form-group">
+<label>Role</label>
+<select>
+<option>Operator</option>
+<option>Administrator</option>
+<option>Super Administrator</option>
+<option>Viewer</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Account Status</label>
+<select>
+<option>Active</option>
+<option>Inactive</option>
+<option>Locked</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Last Login</label>
+<input type="text" value="03 Oct 2026, 02:10 PM" readonly>
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+<div class="card-title">
+<i class="bi bi-key"></i>
+Password
+</div>
+</div>
+
+<div class="card-body">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>Current Password</label>
+<input type="password">
+</div>
+
+<div class="form-group">
+<label>New Password</label>
+<input type="password">
+</div>
+
+<div class="form-group">
+<label>Confirm Password</label>
+<input type="password">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     3. SECURITY
+===================================================== -->
+
+<section id="security" class="settings-section">
+
+<div class="section-heading">
+<h3>Security & Authentication</h3>
+<p>Configure authentication and workstation security policies.</p>
+</div>
+
+<div class="card">
+
+<div class="card-body">
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Two-Factor Authentication</strong>
+<span>Require an additional authentication method during login.</span>
+</div>
+<label class="switch">
+<input type="checkbox">
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Force Password Change</strong>
+<span>Require password change after a defined period.</span>
+</div>
+<label class="switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Login Activity Logging</strong>
+<span>Record successful and failed login attempts.</span>
+</div>
+<label class="switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Automatic Session Lock</strong>
+<span>Lock the PMS session after inactivity.</span>
+</div>
+<label class="switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="form-grid" style="margin-top:20px">
+
+<div class="form-group">
+<label>Session Timeout</label>
+<select>
+<option>5 Minutes</option>
+<option selected>15 Minutes</option>
+<option>30 Minutes</option>
+<option>60 Minutes</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Password Expiry</label>
+<select>
+<option>30 Days</option>
+<option selected>60 Days</option>
+<option>90 Days</option>
+<option>Never</option>
+</select>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     4. BIOMETRIC
+===================================================== -->
+
+<section id="biometric" class="settings-section">
+
+<div class="section-heading">
+<h3>Biometric Devices</h3>
+<p>Connected biometric capture devices and local biometric agent.</p>
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+<div class="card-title">
+<i class="bi bi-fingerprint"></i>
+Connected Devices
+</div>
+
+<span class="status">
+<span class="status-dot"></span>
+Agent Connected
+</span>
+</div>
+
+<div class="card-body">
+
+<div class="device-card">
+
+<div class="device-left">
+<div class="device-icon">
+<i class="bi bi-fingerprint"></i>
+</div>
+
+<div>
+<div class="device-name">Futronic FS80H</div>
+<div class="device-id">Fingerprint Scanner · USB</div>
+</div>
+</div>
+
+<span class="status">
+<span class="status-dot"></span>
+Connected
+</span>
+
+</div>
+
+
+<div class="device-card">
+
+<div class="device-left">
+<div class="device-icon">
+<i class="bi bi-camera"></i>
+</div>
+
+<div>
+<div class="device-name">Web Camera</div>
+<div class="device-id">Photo Capture Device</div>
+</div>
+</div>
+
+<span class="status">
+<span class="status-dot"></span>
+Ready
+</span>
+
+</div>
+
+
+<div class="device-card">
+
+<div class="device-left">
+<div class="device-icon">
+<i class="bi bi-eye"></i>
+</div>
+
+<div>
+<div class="device-name">Iris Scanner</div>
+<div class="device-id">Iris Capture Device</div>
+</div>
+</div>
+
+<span class="status warning">
+<span class="status-dot"></span>
+Not Connected
+</span>
+
+</div>
+
+</div>
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+<div class="card-title">
+<i class="bi bi-sliders"></i>
+Biometric Configuration
+</div>
+</div>
+
+<div class="card-body">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>Fingerprint Quality Threshold</label>
+<input type="number" value="70" min="0" max="100">
+</div>
+
+<div class="form-group">
+<label>Photo Quality Threshold</label>
+<input type="number" value="80" min="0" max="100">
+</div>
+
+<div class="form-group">
+<label>Maximum Capture Attempts</label>
+<select>
+<option>3</option>
+<option selected>5</option>
+<option>10</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Biometric Agent Port</label>
+<input type="text" value="5141">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     5. NETWORK
+===================================================== -->
+
+<section id="network" class="settings-section">
+
+<div class="section-heading">
+<h3>Network & Server</h3>
+<p>Configure PMS application server, API and database connectivity.</p>
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+<div class="card-title">
+<i class="bi bi-server"></i>
+Server Connection
+</div>
+
+<span class="status">
+<span class="status-dot"></span>
+Connected
+</span>
+</div>
+
+<div class="card-body">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>PMS Server</label>
+<input type="text" value="https://pms-server.local">
+</div>
+
+<div class="form-group">
+<label>API Base URL</label>
+<input type="text" value="https://pms-server.local/api">
+</div>
+
+<div class="form-group">
+<label>Database Server</label>
+<input type="text" value="192.168.1.10">
+</div>
+
+<div class="form-group">
+<label>Database Port</label>
+<input type="text" value="5432">
+</div>
+
+<div class="form-group">
+<label>Connection Timeout</label>
+<select>
+<option>10 Seconds</option>
+<option selected>30 Seconds</option>
+<option>60 Seconds</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Connection Mode</label>
+<select>
+<option selected>Online</option>
+<option>Offline</option>
+</select>
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<div class="status-grid">
+
+<div class="status-box">
+<i class="bi bi-server"></i>
+<strong>Application Server</strong>
+<small style="color:#16803c">Connected</small>
+</div>
+
+<div class="status-box">
+<i class="bi bi-database"></i>
+<strong>PostgreSQL</strong>
+<small style="color:#16803c">Connected</small>
+</div>
+
+<div class="status-box">
+<i class="bi bi-fingerprint"></i>
+<strong>Biometric Agent</strong>
+<small style="color:#16803c">Running</small>
+</div>
+
+<div class="status-box">
+<i class="bi bi-cloud-arrow-up"></i>
+<strong>Data Sync</strong>
+<small style="color:#16803c">Synchronized</small>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     6. APPLICATION
+===================================================== -->
+
+<section id="application" class="settings-section">
+
+<div class="section-heading">
+<h3>Application Settings</h3>
+<p>General PMS interface and data display preferences.</p>
+</div>
+
+<div class="card">
+
+<div class="card-body">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>Application Language</label>
+<select>
+<option selected>বাংলা (Bangla)</option>
+<option>English</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Date Format</label>
+<select>
+<option selected>DD-MM-YYYY</option>
+<option>DD/MM/YYYY</option>
+<option>YYYY-MM-DD</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Time Format</label>
+<select>
+<option selected>12 Hour</option>
+<option>24 Hour</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Default Records Per Page</label>
+<select>
+<option>10</option>
+<option selected>25</option>
+<option>50</option>
+<option>100</option>
+</select>
+</div>
+
+</div>
+
+<br>
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Dark Mode</strong>
+<span>Use dark interface for the PMS application.</span>
+</div>
+<label class="switch">
+<input type="checkbox">
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Show Dashboard Statistics</strong>
+<span>Display summary statistics on the dashboard.</span>
+</div>
+<label class="switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     7. PRINTER
+===================================================== -->
+
+<section id="printer" class="settings-section">
+
+<div class="section-heading">
+<h3>Printer & Scanner</h3>
+<p>Configure document printing, scanning and photo output devices.</p>
+</div>
+
+<div class="card">
+
+<div class="card-body">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>Default Printer</label>
+<select>
+<option selected>HP LaserJet Pro</option>
+<option>Canon Printer</option>
+<option>Microsoft Print to PDF</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Photo Printer</label>
+<select>
+<option selected>Default Photo Printer</option>
+<option>None</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Default Scanner</label>
+<select>
+<option selected>Windows Scanner</option>
+<option>None</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Default Paper Size</label>
+<select>
+<option selected>A4</option>
+<option>A5</option>
+<option>Legal</option>
+</select>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     8. NOTIFICATION
+===================================================== -->
+
+<section id="notification" class="settings-section">
+
+<div class="section-heading">
+<h3>Notifications</h3>
+<p>Configure system alerts and operational notifications.</p>
+</div>
+
+<div class="card">
+
+<div class="card-body">
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>System Notifications</strong>
+<span>Show important system notifications.</span>
+</div>
+<label class="switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Biometric Device Alerts</strong>
+<span>Notify when biometric devices disconnect or fail.</span>
+</div>
+<label class="switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Server Connection Alerts</strong>
+<span>Notify when server connection is lost.</span>
+</div>
+<label class="switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Backup Alerts</strong>
+<span>Notify about successful or failed backups.</span>
+</div>
+<label class="switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     9. BACKUP
+===================================================== -->
+
+<section id="backup" class="settings-section">
+
+<div class="section-heading">
+<h3>Data & Backup</h3>
+<p>Database synchronization and backup information.</p>
+</div>
+
+<div class="card">
+
+<div class="card-header">
+<div class="card-title">
+<i class="bi bi-database-check"></i>
+Database Status
+</div>
+</div>
+
+<div class="card-body">
+
+<div class="info-row">
+<span class="info-label">Database Engine</span>
+<span class="info-value">PostgreSQL</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Database Status</span>
+<span class="status"><span class="status-dot"></span>Connected</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Last Backup</span>
+<span class="info-value">03 Oct 2026 — 01:00 AM</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Last Synchronization</span>
+<span class="info-value">03 Oct 2026 — 02:05 PM</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Backup Location</span>
+<span class="info-value">D:\PMS\Backup</span>
+</div>
+
+</div>
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+<div class="card-title">
+<i class="bi bi-cloud-arrow-up"></i>
+Backup Configuration
+</div>
+</div>
+
+<div class="card-body">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>Automatic Backup</label>
+<select>
+<option selected>Daily</option>
+<option>Weekly</option>
+<option>Disabled</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Backup Time</label>
+<input type="time" value="01:00">
+</div>
+
+<div class="form-group">
+<label>Backup Retention</label>
+<select>
+<option>7 Days</option>
+<option selected>30 Days</option>
+<option>90 Days</option>
+<option>1 Year</option>
+</select>
+</div>
+
+</div>
+
+<br>
+
+<button class="btn btn-primary">
+<i class="bi bi-database-down"></i>
+Backup Now
+</button>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     10. AUDIT
+===================================================== -->
+
+<section id="audit" class="settings-section">
+
+<div class="section-heading">
+<h3>Audit & Activity</h3>
+<p>Monitor user activity and important system operations.</p>
+</div>
+
+<div class="card">
+
+<div class="card-body">
+
+<div class="info-row">
+<span class="info-label">Last Login</span>
+<span class="info-value">03 Oct 2026 — 02:10 PM</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Last Logout</span>
+<span class="info-value">02 Oct 2026 — 06:12 PM</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Failed Login Attempts</span>
+<span class="info-value">0</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Last Configuration Change</span>
+<span class="info-value">02 Oct 2026 — 05:30 PM</span>
+</div>
+
+</div>
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+<div class="card-title">
+<i class="bi bi-journal-text"></i>
+Audit Logging
+</div>
+</div>
+
+<div class="card-body">
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>User Activity Log</strong>
+<span>Record user actions performed inside PMS.</span>
+</div>
+<label class="switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Data Modification Log</strong>
+<span>Record creation, modification and deletion of records.</span>
+</div>
+<label class="switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="toggle-row">
+<div class="toggle-info">
+<strong>Device Activity Log</strong>
+<span>Record biometric device connection and capture events.</span>
+</div>
+<label class="switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     11. SYSTEM INFORMATION
+===================================================== -->
+
+<section id="system" class="settings-section">
+
+<div class="section-heading">
+<h3>System Information</h3>
+<p>Software, agent and environment information.</p>
+</div>
+
+<div class="card">
+
+<div class="card-body">
+
+<div class="info-row">
+<span class="info-label">Application</span>
+<span class="info-value">Prisoner Management System</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">PMS Version</span>
+<span class="info-value">1.0.0</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Biometric Agent</span>
+<span class="info-value">1.0.0</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Database</span>
+<span class="info-value">PostgreSQL</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">API Status</span>
+<span class="status"><span class="status-dot"></span>Operational</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Installation Date</span>
+<span class="info-value">01 Oct 2026</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Last Application Update</span>
+<span class="info-value">03 Oct 2026</span>
+</div>
+
+</div>
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+<div class="card-title">
+<i class="bi bi-heart-pulse"></i>
+System Health
+</div>
+</div>
+
+<div class="card-body">
+
+<div class="status-grid">
+
+<div class="status-box">
+<i class="bi bi-cpu"></i>
+<strong>CPU</strong>
+<small>Normal</small>
+</div>
+
+<div class="status-box">
+<i class="bi bi-memory"></i>
+<strong>Memory</strong>
+<small>Normal</small>
+</div>
+
+<div class="status-box">
+<i class="bi bi-hdd"></i>
+<strong>Storage</strong>
+<small>Normal</small>
+</div>
+
+<div class="status-box">
+<i class="bi bi-wifi"></i>
+<strong>Network</strong>
+<small>Connected</small>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     12. ABOUT
+===================================================== -->
+
+<section id="about" class="settings-section">
+
+<div class="section-heading">
+<h3>About & Support</h3>
+<p>Application information and technical support.</p>
+</div>
+
+<div class="card">
+
+<div class="card-body">
+
+<div class="info-row">
+<span class="info-label">Product Name</span>
+<span class="info-value">Prisoner Management System</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Short Name</span>
+<span class="info-value">PMS</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Version</span>
+<span class="info-value">1.0.0</span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Support Type</span>
+<span class="info-value">IT / Application Support</span>
+</div>
+
+</div>
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+<div class="card-title">
+<i class="bi bi-headset"></i>
+Technical Support
+</div>
+</div>
+
+<div class="card-body">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>Support Contact</label>
+<input type="text" value="PMS IT Support" readonly>
+</div>
+
+<div class="form-group">
+<label>Support Extension</label>
+<input type="text" value="XXXX" readonly>
+</div>
+
+<div class="form-group">
+<label>Support Email</label>
+<input type="email" value="support@example.com" readonly>
+</div>
+
+<div class="form-group">
+<label>Documentation</label>
+<input type="text" value="PMS Technical Documentation" readonly>
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<div class="danger-zone">
+
+<h4>
+<i class="bi bi-exclamation-triangle"></i>
+Administrative Actions
+</h4>
+
+<p>
+These operations should only be available to authorized administrators.
+</p>
+
+<button class="btn" style="color:#c53030;border-color:#e5b8b8;">
+<i class="bi bi-arrow-counterclockwise"></i>
+Reset Application Settings
+</button>
+
+</div>
+
+</section>
+
+
+<!-- SAVE -->
+<div class="save-bar">
+
+<button class="btn">
+Cancel
+</button>
+
+<button class="btn btn-primary" onclick="saveSettings()">
+<i class="bi bi-check2-circle"></i>
+Save Changes
+</button>
+
+</div>
+
+
+</main>
+</div>
+</div>
+
+
+<script>
+
+/* =========================
+   SECTION NAVIGATION
+========================= */
+
+function showSection(sectionId, button) {
+
+    document.querySelectorAll(".settings-section")
+        .forEach(section => section.classList.remove("active"));
+
+    document.querySelectorAll(".nav-item")
+        .forEach(item => item.classList.remove("active"));
+
+    const section = document.getElementById(sectionId);
+
+    if (section) {
+        section.classList.add("active");
+    }
+
+    if (button) {
+        button.classList.add("active");
+    }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =========================
+   SAVE SETTINGS
+========================= */
+
+function saveSettings() {
+
+    alert("Settings saved successfully.");
+
+}
+
+
+/* =========================
+   DEVICE STATUS DEMO
+========================= */
+
+console.log("PMS Settings Module Loaded");
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8" />
+    <title>HID Patrol Ten Finger Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #20264d 0%, #0b1020 50%, #05070c 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #e5e7eb;
+            padding: 20px;
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: 1100px;
+            background: rgba(15, 23, 42, 0.92);
+            border-radius: 18px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            display: grid;
+            grid-template-columns: 1.1fr 1.2fr;
+            overflow: hidden;
+        }
+
+        /* Left panel: login fields */
+        .left {
+            padding: 35px;
+            border-right: 1px solid rgba(75, 85, 99, 0.5);
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #9ca3af;
+            margin-bottom: 25px;
+        }
+
+        .role-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-radius: 999px;
+            background: rgba(31, 41, 55, 0.9);
+            padding: 4px;
+        }
+
+        .role-btn {
+            flex: 1;
+            border: none;
+            border-radius: 999px;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #9ca3af;
+            background: transparent;
+            transition: 0.2s;
+        }
+
+        .role-btn.active {
+            background: linear-gradient(135deg, #22c55e, #3b82f6);
+            color: #0b1020;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px 12px;
+            border-radius: 9px;
+            border: 1px solid rgba(107, 114, 128, 0.8);
+            background: rgba(15, 23, 42, 0.95);
+            color: #e5e7eb;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
+        }
+
+        .required {
+            color: #ef4444;
+        }
+
+        .info-text {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        .alert {
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 9px;
+            font-size: 12px;
+            display: none;
+        }
+
+        .alert.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.6);
+            color: #fecaca;
+        }
+
+        .alert.success {
+            display: block;
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.6);
+            color: #bbf7d0;
+        }
+
+        .login-btn {
+            margin-top: 10px;
+            width: 100%;
+            padding: 11px 16px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #3b82f6, #22c55e);
+            color: #0b1020;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.45);
+            transition: 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Right panel: scanner + live image */
+        .right {
+            padding: 30px;
+            background: radial-gradient(circle at top, #020617 0%, #020617 40%, #0b1020 90%);
+            position: relative;
+        }
+
+        .right-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .right-subtitle {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-bottom: 18px;
+        }
+
+        .scanner-shell {
+            margin-top: 8px;
+            border-radius: 18px;
+            border: 1px solid rgba(148, 163, 184, 0.55);
+            background: linear-gradient(145deg, #020617, #020617);
+            padding: 16px;
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 12px;
+        }
+
+        /* live image area */
+        .live-area {
+            border-radius: 14px;
+            background: radial-gradient(circle at top, #0f172a 0%, #020617 60%);
+            border: 1px solid rgba(55, 65, 81, 0.8);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .live-header {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .live-header span.status-pill {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(34, 197, 94, 0.6);
+            color: #22c55e;
+        }
+
+        .live-screen {
+            flex: 1;
+            border-radius: 10px;
+            background: #020617;
+            border: 1px solid #111827;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .live-screen img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: none; /* শুরুতে কোন ইমেজ নেই */
+        }
+
+        .live-placeholder {
+            font-size: 11px;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .scan-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #22c55e, transparent);
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+
+        .live-screen.scanning .scan-line {
+            animation: scanY 1.6s linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes scanY {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(100%);
+            }
+        }
+
+        .live-footer {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 6px;
+            text-align: right;
+        }
+
+        /* control area */
+        .control-area {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-area button {
+            border-radius: 999px;
+            border: 1px solid rgba(55, 65, 81, 0.8);
+            background: radial-gradient(circle at top, #0f172a 0%, #020617 100%);
+            color: #e5e7eb;
+            padding: 9px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+
+        .control-area button:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.6);
+        }
+
+        .hint-list {
+            margin-top: 6px;
+            font-size: 11px;
+            color: #9ca3af;
+            list-style: none;
+        }
+
+        .hint-list li::before {
+            content: "• ";
+            color: #22c55e;
+        }
+
+        .chip-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(75, 85, 99, 0.8);
+            background: rgba(15, 23, 42, 0.7);
+            color: #9ca3af;
+        }
+
+        @media (max-width: 900px) {
+            .wrap {
+                grid-template-columns: 1fr;
+            }
+
+            .left {
+                border-right: none;
+                border-bottom: 1px solid rgba(75, 85, 99, 0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <!-- LEFT: login fields -->
+    <div class="left">
+        <div class="title">🔐 HID Patrol Login</div>
+        <div class="subtitle">
+            অপারেটরকে HID Patrol ten‑finger স্ক্যানার দিয়ে লগইন করতে হবে। আঙুলের লাইভ ইমেজ স্ক্রিনে দেখা যাবে।
+        </div>
+
+        <div class="role-tabs">
+            <button class="role-btn active" id="opTab">👨‍💼 অপারেটর (ফিঙ্গার)</button>
+            <button class="role-btn" id="userTab">👤 সাধারণ ব্যবহারকারী</button>
+        </div>
+
+        <!-- Operator form -->
+        <div id="operatorForm">
+            <div class="form-group">
+                <label for="opId">অপারেটর আইডি <span class="required">*</span></label>
+                <input id="opId" type="text" placeholder="Operator ID লিখুন" />
+                <div class="info-text">HID Patrol স্ক্যান সফল + অপারেটর আইডি ছাড়া লগইন হবে না।</div>
+            </div>
+
+            <div class="form-group">
+                <label>ফিঙ্গার স্ক্যান স্ট্যাটাস</label>
+                <div class="info-text" id="fpStatusText">কোনো ফিঙ্গার স্ক্যান করা হয়নি।</div>
+            </div>
+
+            <div id="opAlert" class="alert"></div>
+
+            <button class="login-btn" id="opLoginBtn" onclick="operatorLogin()">
+                সিস্টেমে লগইন করুন
+            </button>
+        </div>
+
+        <!-- User form -->
+        <div id="userForm" style="display:none;">
+            <div class="form-group">
+                <label for="userId">User ID <span class="required">*</span></label>
+                <input id="userId" type="text" placeholder="User ID লিখুন" />
+            </div>
+
+            <div class="form-group">
+                <label for="userPass">Password <span class="required">*</span></label>
+                <input id="userPass" type="password" placeholder="Password লিখুন" />
+            </div>
+
+            <div id="userAlert" class="alert"></div>
+
+            <button class="login-btn" onclick="userLogin()">লগইন করুন (ID/Password)</button>
+        </div>
+    </div>
+
+    <!-- RIGHT: scanner + live finger image -->
+    <div class="right">
+        <div class="right-title">🖐 HID Patrol Ten‑Finger Scanner</div>
+        <div class="right-subtitle">
+            স্ক্যানারে আঙুল রাখলে এখানে লাইভ ফিঙ্গার ইমেজ দেখা যাবে (SDK থেকে আসা ইমেজ)। 
+        </div>
+
+        <div class="scanner-shell">
+            <!-- Live image area -->
+            <div class="live-area">
+                <div class="live-header">
+                    <span>লাইভ ফিঙ্গার ইমেজ</span>
+                    <span class="status-pill" id="liveStatus">IDLE</span>
+                </div>
+
+                <div class="live-screen" id="liveScreen">
+                    <div class="scan-line"></div>
+                    <img id="fingerImage" alt="Finger image" />
+                    <div class="live-placeholder" id="livePlaceholder">
+                        ফিঙ্গার স্ক্যান শুরু হলে এখানে আঙুলের লাইভ ইমেজ দেখা যাবে।
+                    </div>
+                </div>
+
+                <div class="live-footer" id="liveFooter">
+                    Last capture: নেই
+                </div>
+            </div>
+
+            <!-- Controls + tips -->
+            <div class="control-area">
+                <button type="button" onclick="startScan()">
+                    🔍 স্ক্যান শুরু করুন
+                </button>
+
+                <button type="button" onclick="clearScan()">
+                    ♻️ লাইভ ইমেজ ক্লিয়ার করুন
+                </button>
+
+                <ul class="hint-list">
+                    <li>আঙুল সমানভাবে প্রিজমের ওপর রাখুন।</li>
+                    <li>অতিরিক্ত চাপ দেবেন না, শুধু হালকা চাপ।</li>
+                    <li>এক এক করে ১০টি আঙুল স্ক্যান করা যাবে (flat/rolled)।</li>
+                </ul>
+
+                <div class="chip-row">
+                    <div class="chip">Appendix F / FAP 60</div>
+                    <div class="chip">Resolution 500 ppi</div>
+                    <div class="chip">USB 2.0 Interface</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let fingerprintVerified = false;
+
+    // Tab switch
+    const opTab = document.getElementById("opTab");
+    const userTab = document.getElementById("userTab");
+    const operatorForm = document.getElementById("operatorForm");
+    const userForm = document.getElementById("userForm");
+
+    opTab.addEventListener("click", () => {
+        opTab.classList.add("active");
+        userTab.classList.remove("active");
+        operatorForm.style.display = "block";
+        userForm.style.display = "none";
+    });
+
+    userTab.addEventListener("click", () => {
+        userTab.classList.add("active");
+        opTab.classList.remove("active");
+        operatorForm.style.display = "none";
+        userForm.style.display = "block";
+    });
+
+    // Fake scan demo (এখানে পরে HID SDK থেকে ইমেজ আনা হবে)
+    function startScan() {
+        const liveScreen = document.getElementById("liveScreen");
+        const fingerImage = document.getElementById("fingerImage");
+        const livePlaceholder = document.getElementById("livePlaceholder");
+        const liveStatus = document.getElementById("liveStatus");
+        const liveFooter = document.getElementById("liveFooter");
+        const fpStatusText = document.getElementById("fpStatusText");
+        const opAlert = document.getElementById("opAlert");
+
+        liveScreen.classList.add("scanning");
+        liveStatus.textContent = "SCANNING...";
+        liveStatus.style.color = "#f59e0b";
+        livePlaceholder.textContent = "স্ক্যানিং চলছে, আঙুল স্থির রাখুন...";
+
+        // এখানে আসল ক্ষেত্রে আপনি SDK দিয়ে ইমেজ নিয়ে আসবেন
+        // যেমন: fingerImage.src = "data:image/png;base64,....";
+        setTimeout(() => {
+            liveScreen.classList.remove("scanning");
+
+            // ডেমো: একটি placeholder ছবি ব্যবহার করছি
+            fingerImage.src =
+                "https://dummyimage.com/300x200/0f172a/22c55e&text=Finger+Image";
+            fingerImage.style.display = "block";
+            livePlaceholder.style.display = "none";
+
+            liveStatus.textContent = "CAPTURED";
+            liveStatus.style.color = "#22c55e";
+            liveFooter.textContent =
+                "Last capture: " + new Date().toLocaleTimeString("bn-BD");
+
+            fpStatusText.textContent = "ফিঙ্গার স্ক্যান সফল হয়েছে।";
+            fingerprintVerified = true;
+
+            opAlert.textContent = "ফিঙ্গার ইমেজ ক্যাপচার সফল, এখন লগইন করতে পারবেন।";
+            opAlert.className = "alert success";
+        }, 2500);
+    }
+
+    function clearScan() {
+        const fingerImage = document.getElementById("fingerImage");
+        const livePlaceholder = document.getElementById("livePlaceholder");
+        const liveStatus = document.getElementById("liveStatus");
+        const liveFooter = document.getElementById("liveFooter");
+        const fpStatusText = document.getElementById("fpStatusText");
+        const opAlert = document.getElementById("opAlert");
+
+        fingerImage.style.display = "none";
+        fingerImage.src = "";
+        livePlaceholder.style.display = "block";
+        livePlaceholder.textContent =
+            "ফিঙ্গার স্ক্যান শুরু হলে এখানে আঙুলের লাইভ ইমেজ দেখা যাবে।";
+        liveStatus.textContent = "IDLE";
+        liveStatus.style.color = "#22c55e";
+        liveFooter.textContent = "Last capture: নেই";
+
+        fpStatusText.textContent = "কোনো ফিঙ্গার স্ক্যান করা হয়নি।";
+        fingerprintVerified = false;
+
+        opAlert.textContent = "";
+        opAlert.className = "alert";
+    }
+
+    function operatorLogin() {
+        const opId = document.getElementById("opId").value.trim();
+        const opAlert = document.getElementById("opAlert");
+
+        if (!fingerprintVerified) {
+            opAlert.textContent =
+                "❌ প্রথমে HID Patrol দিয়ে ফিঙ্গার স্ক্যান করুন, তারপর লগইন করুন।";
+            opAlert.className = "alert error";
+            return;
+        }
+
+        if (!opId) {
+            opAlert.textContent = "❌ অপারেটর আইডি লিখতে হবে।";
+            opAlert.className = "alert error";
+            return;
+        }
+
+        opAlert.textContent = "✅ HID Patrol + Operator ID ভেরিফাইড। লগইন সফল!";
+        opAlert.className = "alert success";
+
+        console.log("Operator login", {
+            operatorId: opId,
+            fingerprintVerified,
+            time: new Date().toISOString()
+        });
+    }
+
+    function userLogin() {
+        const userId = document.getElementById("userId").value.trim();
+        const userPass = document.getElementById("userPass").value.trim();
+        const userAlert = document.getElementById("userAlert");
+
+        if (!userId || !userPass) {
+            userAlert.textContent = "❌ User ID এবং Password দুটোই লাগবে।";
+            userAlert.className = "alert error";
+            return;
+        }
+
+        userAlert.textContent = "✅ সাধারণ ব্যবহারকারী লগইন সফল!";
+        userAlert.className = "alert success";
+
+        console.log("User login", {
+            userId,
+            passLength: userPass.length,
+            time: new Date().toISOString()
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,2734 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PMS | Prisoner Management System</title>
+
+<!-- =========================
+     External Libraries
+========================= -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+:root {
+    --sidebar-bg: #0f172a;
+    --sidebar-text: #94a3b8;
+    --sidebar-active: #2563eb;
+
+    --primary: #1e293b;
+    --accent: #2563eb;
+
+    --bg: #f1f5f9;
+    --card: #ffffff;
+
+    --text: #334155;
+    --muted: #64748b;
+
+    --border: #e2e8f0;
+
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #06b6d4;
+
+    --sidebar-width: 280px;
+    --sidebar-collapsed: 80px;
+}
+
+/* =========================
+   GLOBAL
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: "Noto Sans Bengali", "Inter", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+
+    display: flex;
+    overflow: hidden;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+
+    display: flex;
+    flex-direction: column;
+
+    flex-shrink: 0;
+
+    transition: width .25s ease;
+
+    z-index: 1000;
+}
+
+.sidebar.collapsed {
+    width: var(--sidebar-collapsed);
+}
+
+/* Brand */
+
+.brand {
+    min-height: 70px;
+
+    padding: 15px 18px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    background: rgba(0,0,0,.18);
+
+    border-bottom: 1px solid rgba(255,255,255,.06);
+
+    overflow: hidden;
+}
+
+.brand-icon {
+    min-width: 38px;
+    width: 38px;
+    height: 38px;
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(37,99,235,.15);
+
+    color: #60a5fa;
+
+    font-size: 19px;
+}
+
+.brand-text {
+    white-space: nowrap;
+}
+
+.brand-text b {
+    display: block;
+
+    font-size: 18px;
+
+    color: #fff;
+}
+
+.brand-text span {
+    display: block;
+
+    font-size: 10px;
+
+    color: #94a3b8;
+}
+
+/* Sidebar navigation */
+
+.sidebar-nav {
+    flex: 1;
+
+    padding: 12px 10px;
+
+    overflow-y: auto;
+}
+
+.nav-section-label {
+    padding: 13px 14px 7px;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .6px;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+.nav-link {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 43px;
+
+    padding: 10px 14px;
+
+    margin-bottom: 4px;
+
+    border-radius: 8px;
+
+    color: var(--sidebar-text);
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    transition: all .18s ease;
+
+    white-space: nowrap;
+}
+
+.nav-link i {
+    width: 20px;
+
+    min-width: 20px;
+
+    text-align: center;
+
+    font-size: 15px;
+}
+
+.nav-link:hover {
+    background: rgba(255,255,255,.06);
+
+    color: #fff;
+}
+
+.nav-link.active {
+    background: var(--sidebar-active);
+
+    color: #fff;
+
+    font-weight: 600;
+
+    box-shadow: 0 4px 12px rgba(37,99,235,.18);
+}
+
+/* Collapsed sidebar */
+
+.sidebar.collapsed .brand {
+    justify-content: center;
+
+    padding: 15px 10px;
+}
+
+.sidebar.collapsed .brand-text,
+.sidebar.collapsed .nav-section-label,
+.sidebar.collapsed .nav-link span {
+    display: none;
+}
+
+.sidebar.collapsed .nav-link {
+    justify-content: center;
+
+    padding: 10px;
+}
+
+.sidebar.collapsed .nav-link i {
+    margin: 0;
+}
+
+/* =========================
+   MAIN WRAPPER
+========================= */
+
+.main-wrapper {
+    flex: 1;
+
+    min-width: 0;
+
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar {
+    height: 70px;
+
+    flex-shrink: 0;
+
+    background: var(--card);
+
+    border-bottom: 1px solid var(--border);
+
+    padding: 0 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.hdr-left {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    min-width: 0;
+}
+
+.sidebar-toggler {
+    width: 38px;
+    height: 38px;
+
+    border: 1px solid var(--border);
+
+    background: #fff;
+
+    border-radius: 8px;
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: .2s;
+}
+
+.sidebar-toggler:hover {
+    background: #f8fafc;
+
+    border-color: #cbd5e1;
+}
+
+.page-heading {
+    min-width: 0;
+}
+
+.page-title {
+    color: var(--primary);
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.page-subtitle {
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+/* Topbar right */
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+}
+
+.system-status {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 7px 11px;
+
+    border: 1px solid #d1fae5;
+
+    background: #ecfdf5;
+
+    color: #047857;
+
+    border-radius: 7px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: var(--success);
+
+    box-shadow: 0 0 0 4px rgba(16,185,129,.12);
+}
+
+.live-clock {
+    font-size: 11px;
+
+    color: var(--muted);
+
+    white-space: nowrap;
+}
+
+.hdr-user {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding-left: 14px;
+
+    border-left: 1px solid var(--border);
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--accent);
+
+    color: #fff;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.who b {
+    display: block;
+
+    font-size: 12px;
+
+    color: var(--primary);
+}
+
+.who span {
+    display: block;
+
+    font-size: 10px;
+
+    color: var(--muted);
+}
+
+/* =========================
+   DASHBOARD BODY
+========================= */
+
+.dashboard-body {
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 22px;
+}
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+.dashboard-header h1 {
+    font-size: 20px;
+
+    font-weight: 700;
+
+    color: var(--primary);
+
+    margin: 0;
+}
+
+.dashboard-header p {
+    margin: 3px 0 0;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+.quick-actions {
+    display: flex;
+
+    gap: 7px;
+}
+
+.quick-btn {
+    border: 1px solid var(--border);
+
+    background: #fff;
+
+    color: var(--text);
+
+    border-radius: 7px;
+
+    padding: 8px 11px;
+
+    font-size: 11px;
+
+    text-decoration: none;
+
+    transition: .2s;
+}
+
+.quick-btn:hover {
+    border-color: #93c5fd;
+
+    color: var(--accent);
+
+    background: #eff6ff;
+}
+
+/* =========================
+   STAT CARDS
+========================= */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+.stat-card {
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    padding: 17px;
+
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-shadow: 0 1px 3px rgba(0,0,0,.025);
+
+    transition: .2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 16px rgba(15,23,42,.06);
+}
+
+.stat-info {
+    min-width: 0;
+}
+
+.stat-label {
+    color: var(--muted);
+
+    font-size: 11px;
+
+    margin-bottom: 4px;
+}
+
+.stat-number {
+    color: var(--primary);
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+.stat-meta {
+    color: var(--muted);
+
+    font-size: 9px;
+
+    margin-top: 4px;
+}
+
+.stat-icon {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+
+    flex-shrink: 0;
+}
+
+.bg-blue {
+    color: #2563eb;
+    background: rgba(37,99,235,.10);
+}
+
+.bg-green {
+    color: #10b981;
+    background: rgba(16,185,129,.10);
+}
+
+.bg-orange {
+    color: #f59e0b;
+    background: rgba(245,158,11,.10);
+}
+
+.bg-red {
+    color: #ef4444;
+    background: rgba(239,68,68,.10);
+}
+
+/* =========================
+   SYSTEM OVERVIEW
+========================= */
+
+.overview-grid {
+    display: grid;
+
+    grid-template-columns: 1.6fr 1fr 1fr;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+.panel {
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    padding: 17px;
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
+}
+
+.panel-title {
+    color: var(--primary);
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    margin: 0;
+}
+
+.panel-link {
+    color: var(--accent);
+
+    text-decoration: none;
+
+    font-size: 10px;
+}
+
+.panel-link:hover {
+    text-decoration: underline;
+}
+
+/* Database health */
+
+.db-main {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+}
+
+.db-icon {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 20px;
+}
+
+.db-info strong {
+    display: block;
+
+    color: var(--primary);
+
+    font-size: 18px;
+}
+
+.db-info span {
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+.progress-wrap {
+    margin-top: 15px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 5px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+}
+
+.progress {
+    height: 6px;
+
+    background: #e2e8f0;
+
+    border-radius: 20px;
+}
+
+.progress-bar {
+    border-radius: 20px;
+}
+
+/* Mini metrics */
+
+.mini-metrics {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+}
+
+.mini-box {
+    padding: 11px;
+
+    background: #f8fafc;
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+}
+
+.mini-box i {
+    color: var(--accent);
+
+    font-size: 13px;
+
+    margin-bottom: 6px;
+}
+
+.mini-box strong {
+    display: block;
+
+    font-size: 16px;
+
+    color: var(--primary);
+}
+
+.mini-box span {
+    font-size: 9px;
+
+    color: var(--muted);
+}
+
+/* =========================
+   CHARTS
+========================= */
+
+.charts-grid {
+    display: grid;
+
+    grid-template-columns: 2fr 1fr;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+.chart-card {
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    padding: 17px;
+
+    min-width: 0;
+}
+
+.chart-container {
+    position: relative;
+
+    height: 260px;
+
+    width: 100%;
+}
+
+/* =========================
+   BOTTOM GRID
+========================= */
+
+.bottom-grid {
+    display: grid;
+
+    grid-template-columns: 1.45fr .8fr;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+/* =========================
+   ACTIVITY TABLE
+========================= */
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.activity-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 11px;
+}
+
+.activity-table th {
+    background: #f8fafc;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    padding: 10px;
+
+    text-align: left;
+
+    border-bottom: 1px solid var(--border);
+
+    white-space: nowrap;
+}
+
+.activity-table td {
+    padding: 10px;
+
+    border-bottom: 1px solid var(--border);
+
+    color: var(--text);
+
+    vertical-align: middle;
+}
+
+.activity-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.activity-table tr:hover td {
+    background: #fafcff;
+}
+
+.ref {
+    color: var(--primary);
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.badge-custom {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 4px 7px;
+
+    border-radius: 5px;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.badge-success {
+    color: #047857;
+
+    background: #d1fae5;
+}
+
+.badge-primary {
+    color: #1d4ed8;
+
+    background: #dbeafe;
+}
+
+.badge-warning {
+    color: #92400e;
+
+    background: #fef3c7;
+}
+
+.badge-danger {
+    color: #b91c1c;
+
+    background: #fee2e2;
+}
+
+.badge-info {
+    color: #0e7490;
+
+    background: #cffafe;
+}
+
+/* =========================
+   LIVE ACTIVITY
+========================= */
+
+.activity-feed {
+    position: relative;
+}
+
+.activity-item {
+    display: flex;
+
+    gap: 10px;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.activity-item:last-child {
+    border-bottom: 0;
+}
+
+.activity-icon {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    font-size: 12px;
+}
+
+.activity-content {
+    min-width: 0;
+}
+
+.activity-content strong {
+    display: block;
+
+    color: var(--primary);
+
+    font-size: 10.5px;
+
+    font-weight: 600;
+}
+
+.activity-content span {
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    margin-top: 2px;
+}
+
+.activity-time {
+    color: #94a3b8;
+
+    font-size: 8px;
+
+    margin-top: 3px;
+}
+
+/* =========================
+   RISK ALERTS
+========================= */
+
+.alert-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.alert-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 9px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 7px;
+
+    background: #fff;
+}
+
+.alert-icon {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+.alert-content {
+    min-width: 0;
+}
+
+.alert-content strong {
+    display: block;
+
+    color: var(--primary);
+
+    font-size: 10px;
+}
+
+.alert-content span {
+    color: var(--muted);
+
+    font-size: 8px;
+}
+
+/* =========================
+   SYSTEM FOOTER
+========================= */
+
+.dashboard-footer {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    padding: 3px 2px 10px;
+}
+
+.footer-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1200px) {
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .overview-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .overview-grid .panel:first-child {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 900px) {
+
+    .charts-grid,
+    .bottom-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .overview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .overview-grid .panel:first-child {
+        grid-column: auto;
+    }
+
+    .system-status,
+    .live-clock,
+    .who {
+        display: none;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .sidebar {
+        position: fixed;
+
+        left: 0;
+        top: 0;
+
+        transform: translateX(-100%);
+
+        box-shadow: 8px 0 30px rgba(0,0,0,.15);
+    }
+
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+
+    .main-wrapper {
+        width: 100%;
+    }
+
+    .topbar {
+        padding: 0 14px;
+    }
+
+    .dashboard-body {
+        padding: 14px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .quick-actions {
+        width: 100%;
+    }
+
+    .quick-btn {
+        flex: 1;
+
+        text-align: center;
+    }
+
+    .page-title {
+        font-size: 14px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <!-- Brand -->
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fa-solid fa-building-shield"></i>
+        </div>
+
+        <div class="brand-text">
+            <b>PMS</b>
+            <span>Prisoner Management System</span>
+        </div>
+
+    </div>
+
+
+    <!-- Navigation -->
+
+    <nav class="sidebar-nav">
+
+        <div class="nav-section-label">
+            প্রধান প্ল্যাটফর্ম
+        </div>
+
+        <a href="index.html"
+           class="nav-link active"
+           title="ড্যাশবোর্ড">
+            <i class="fa-solid fa-gauge-high"></i>
+            <span>ড্যাশবোর্ড</span>
+        </a>
+
+        <a href="createid.html"
+           class="nav-link"
+           title="নতুন বন্দি নিবন্ধন">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>নতুন বন্দি নিবন্ধন</span>
+        </a>
+
+        <a href="database.html"
+           class="nav-link"
+           title="লোকাল ডাটাবেস">
+            <i class="fa-solid fa-database"></i>
+            <span>লোকাল ডাটাবেস</span>
+        </a>
+
+
+        <a href="search.html"
+           class="nav-link"
+           title="স্মার্ট অনুসন্ধান">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>স্মার্ট অনুসন্ধান</span>
+        </a>
+
+
+
+
+        <div class="nav-section-label">
+            অপারেশনস
+        </div>
+
+        <a href="identification.html"
+           class="nav-link"
+           title="Inmate Identification">
+            <i class="fa-solid fa-fingerprint"></i>
+            <span>বন্দি আইডেন্টিফিকেশন</span>
+        </a>
+
+        <a href="verification.html"
+           class="nav-link"
+           title="Inmate Verification">
+            <i class="fa-solid fa-fingerprint"></i>
+            <span>বন্দি ভেরিফিকেশন</span>
+        </a>
+
+        <a href="medical.html"
+           class="nav-link"
+           title="চিকিৎসা ও ভিজিটর">
+            <i class="fa-solid fa-notes-medical"></i>
+            <span>চিকিৎসা ও ভিজিটর</span>
+        </a>
+
+        <a href="transfers.html"
+           class="nav-link"
+           title="বদলি ম্যানেজমেন্ট">
+            <i class="fa-solid fa-right-left"></i>
+            <span>বদলি ম্যানেজমেন্ট</span>
+        </a>
+
+
+        <div class="nav-section-label">
+            সিস্টেম প্রশাসন
+        </div>
+
+        <a href="reports.html"
+           class="nav-link"
+           title="AI Analytics">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>এআই অ্যানালিটিক্স রিপোর্ট</span>
+        </a>
+
+        <a href="settings.html"
+           class="nav-link"
+           title="সিস্টেম সেটিংস">
+            <i class="fa-solid fa-gear"></i>
+            <span>সিস্টেম সেটিংস</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- =========================================================
+     MAIN WRAPPER
+========================================================= -->
+
+<div class="main-wrapper">
+
+
+    <!-- ================= TOPBAR ================= -->
+
+    <header class="topbar">
+
+        <div class="hdr-left">
+
+            <button
+                class="sidebar-toggler"
+                id="sidebarToggle"
+                aria-label="Toggle sidebar">
+
+                <i class="fa-solid fa-bars"></i>
+
+            </button>
+
+            <div class="page-heading">
+
+                <div class="page-title">
+                    ড্যাশবোর্ড
+                </div>
+
+                <div class="page-subtitle">
+                    Prisoner Management System
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="topbar-right">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                System Online
+            </div>
+
+            <div class="live-clock" id="liveClock">
+                --:--:--
+            </div>
+
+            <div class="hdr-user">
+
+                <div class="avatar">
+                    NU
+                </div>
+
+                <div class="who">
+                    <b>Engr. Nizam Uddin</b>
+                    <span>সুপারিনটেনডেন্ট</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= DASHBOARD BODY ================= -->
+
+    <main class="dashboard-body">
+
+
+        <!-- Dashboard heading -->
+
+        <div class="dashboard-header">
+
+            <div>
+                <h1>সিস্টেম ওভারভিউ</h1>
+
+                <p>
+                    Central Database, Operations, Biometric & Real-Time System Activity
+                </p>
+            </div>
+
+
+            <div class="quick-actions">
+
+                <a href="createid.html" class="quick-btn">
+                    <i class="fa-solid fa-user-plus"></i>
+                    নতুন নিবন্ধন
+                </a>
+
+                <a href="search.html" class="quick-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    অনুসন্ধান
+                </a>
+
+                <a href="search.html" class="quick-btn">
+                    <i class="fa-solid fa-file-chart-column"></i>
+                    রিপোর্ট
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SUMMARY STATISTICS
+        ================================================== -->
+
+        <section class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <div class="stat-info">
+
+                    <div class="stat-label">
+                        মোট সক্রিয় বন্দি
+                    </div>
+
+                    <div class="stat-number">
+                        ১২,৪৫০
+                    </div>
+
+                    <div class="stat-meta">
+                        সকল কারাগার মিলিয়ে
+                    </div>
+
+                </div>
+
+                <div class="stat-icon bg-blue">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-info">
+
+                    <div class="stat-label">
+                        আজকের নতুন এন্ট্রি
+                    </div>
+
+                    <div class="stat-number">
+                        ২৮
+                    </div>
+
+                    <div class="stat-meta">
+                        গতকালের তুলনায় +৬
+                    </div>
+
+                </div>
+
+                <div class="stat-icon bg-green">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-info">
+
+                    <div class="stat-label">
+                        মুক্তি / জামিন / বদলি
+                    </div>
+
+                    <div class="stat-number">
+                        ১২
+                    </div>
+
+                    <div class="stat-meta">
+                        আজকের কার্যক্রম
+                    </div>
+
+                </div>
+
+                <div class="stat-icon bg-orange">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-info">
+
+                    <div class="stat-label">
+                        AI Risk Alert
+                    </div>
+
+                    <div class="stat-number text-danger">
+                        ০৫
+                    </div>
+
+                    <div class="stat-meta">
+                        তাৎক্ষণিক পর্যালোচনা প্রয়োজন
+                    </div>
+
+                </div>
+
+                <div class="stat-icon bg-red">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CENTRAL DATABASE OVERVIEW
+        ================================================== -->
+
+        <section class="overview-grid">
+
+
+            <!-- Database -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2 class="panel-title">
+                        <i class="fa-solid fa-server text-primary"></i>
+                        Central Database
+                    </h2>
+
+                    <a href="database.html"
+                       class="panel-link">
+                        বিস্তারিত →
+                    </a>
+
+                </div>
+
+
+                <div class="db-main">
+
+                    <div class="db-icon">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+
+                    <div class="db-info">
+
+                        <strong>
+                            PostgreSQL Central DB
+                        </strong>
+
+                        <span>
+                            Corporate Data Center • Primary Database
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="progress-wrap">
+
+                    <div class="progress-label">
+
+                        <span>
+                            Database Health
+                        </span>
+
+                        <strong>
+                            98.7%
+                        </strong>
+
+                    </div>
+
+                    <div class="progress">
+
+                        <div
+                            class="progress-bar bg-success"
+                            style="width:98.7%">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Database records -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2 class="panel-title">
+                        ডাটাবেস রেকর্ড
+                    </h2>
+
+                </div>
+
+
+                <div class="mini-metrics">
+
+                    <div class="mini-box">
+
+                        <i class="fa-solid fa-id-card"></i>
+
+                        <strong>
+                            ১২,৪৫০
+                        </strong>
+
+                        <span>
+                            Prisoner Records
+                        </span>
+
+                    </div>
+
+
+                    <div class="mini-box">
+
+                        <i class="fa-solid fa-fingerprint"></i>
+
+                        <strong>
+                            ১১,৯৮২
+                        </strong>
+
+                        <span>
+                            Biometric Records
+                        </span>
+
+                    </div>
+
+
+                    <div class="mini-box">
+
+                        <i class="fa-solid fa-gavel"></i>
+
+                        <strong>
+                            ৮,৭৬২
+                        </strong>
+
+                        <span>
+                            Case Records
+                        </span>
+
+                    </div>
+
+
+                    <div class="mini-box">
+
+                        <i class="fa-solid fa-file-lines"></i>
+
+                        <strong>
+                            ৪৫,৮২১
+                        </strong>
+
+                        <span>
+                            Documents
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- System -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2 class="panel-title">
+                        সিস্টেম স্ট্যাটাস
+                    </h2>
+
+                </div>
+
+
+                <div class="mini-metrics">
+
+                    <div class="mini-box">
+
+                        <i class="fa-solid fa-users"></i>
+
+                        <strong>
+                            ১৮৪
+                        </strong>
+
+                        <span>
+                            Active Users
+                        </span>
+
+                    </div>
+
+
+                    <div class="mini-box">
+
+                        <i class="fa-solid fa-laptop"></i>
+
+                        <strong>
+                            ৭৬
+                        </strong>
+
+                        <span>
+                            Online Devices
+                        </span>
+
+                    </div>
+
+
+                    <div class="mini-box">
+
+                        <i class="fa-solid fa-fingerprint"></i>
+
+                        <strong>
+                            Online
+                        </strong>
+
+                        <span>
+                            BioAgent
+                        </span>
+
+                    </div>
+
+
+                    <div class="mini-box">
+
+                        <i class="fa-solid fa-link"></i>
+
+                        <strong>
+                            99.9%
+                        </strong>
+
+                        <span>
+                            API Uptime
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CHARTS
+        ================================================== -->
+
+        <section class="charts-grid">
+
+
+            <!-- Trend chart -->
+
+            <div class="chart-card">
+
+                <div class="panel-header">
+
+                    <h2 class="panel-title">
+                        মাসভিত্তিক বন্দি আগমন ও মুক্তির ট্রেন্ড
+                    </h2>
+
+                    <span class="badge-custom badge-info">
+                        ২০২৬
+                    </span>
+
+                </div>
+
+                <div class="chart-container">
+
+                    <canvas id="mainTrendChart"></canvas>
+
+                </div>
+
+            </div>
+
+
+            <!-- Nature chart -->
+
+            <div class="chart-card">
+
+                <div class="panel-header">
+
+                    <h2 class="panel-title">
+                        বন্দির প্রকৃতি ও ঝুঁকি
+                    </h2>
+
+                </div>
+
+                <div class="chart-container">
+
+                    <canvas id="naturePieChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             RECENT ACTIVITY + RISK
+        ================================================== -->
+
+        <section class="bottom-grid">
+
+
+            <!-- Recent activity -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2 class="panel-title">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        সাম্প্রতিক সিস্টেম অডিট ট্রেইল
+                    </h2>
+
+                    <a href="reports.html"
+                       class="panel-link">
+                        সকল লগ →
+                    </a>
+
+                </div>
+
+
+                <div class="table-wrap">
+
+                    <table class="activity-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    ID / REF
+                                </th>
+
+                                <th>
+                                    ACTION
+                                </th>
+
+                                <th>
+                                    DETAILS
+                                </th>
+
+                                <th>
+                                    USER
+                                </th>
+
+                                <th>
+                                    TIME
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="auditTable">
+
+                            <tr>
+
+                                <td class="ref">
+                                    #PR-2026-9421
+                                </td>
+
+                                <td>
+                                    <span class="badge-custom badge-success">
+                                        BIOMETRIC
+                                    </span>
+                                </td>
+
+                                <td>
+                                    NID matching ও ১০ আঙুলের fingerprint verification সফল।
+                                </td>
+
+                                <td>
+                                    অফিসার কারিমুল হক
+                                </td>
+
+                                <td>
+                                    ১০ মিনিট আগে
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td class="ref">
+                                    #PR-2026-8812
+                                </td>
+
+                                <td>
+                                    <span class="badge-custom badge-primary">
+                                        REGISTRATION
+                                    </span>
+                                </td>
+
+                                <td>
+                                    নতুন হাজতি হিসেবে এন্ট্রি ও prisoner file তৈরি।
+                                </td>
+
+                                <td>
+                                    জেল সুপার
+                                </td>
+
+                                <td>
+                                    ৪৫ মিনিট আগে
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td class="ref">
+                                    #PR-2026-5011
+                                </td>
+
+                                <td>
+                                    <span class="badge-custom badge-warning">
+                                        TRANSFER
+                                    </span>
+                                </td>
+
+                                <td>
+                                    কারাগার থেকে অন্য কারাগারে transfer সম্পন্ন।
+                                </td>
+
+                                <td>
+                                    Control Room
+                                </td>
+
+                                <td>
+                                    ২ ঘণ্টা আগে
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td class="ref">
+                                    #BIO-2026-1108
+                                </td>
+
+                                <td>
+                                    <span class="badge-custom badge-success">
+                                        NID VERIFY
+                                    </span>
+                                </td>
+
+                                <td>
+                                    Fingerprint দ্বারা NID server verification সফল।
+                                </td>
+
+                                <td>
+                                    Biometric Unit
+                                </td>
+
+                                <td>
+                                    ২ ঘণ্টা ১৫ মিনিট আগে
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td class="ref">
+                                    #USR-2026-0081
+                                </td>
+
+                                <td>
+                                    <span class="badge-custom badge-info">
+                                        LOGIN
+                                    </span>
+                                </td>
+
+                                <td>
+                                    নতুন workstation থেকে secure login সম্পন্ন।
+                                </td>
+
+                                <td>
+                                    Officer Rahman
+                                </td>
+
+                                <td>
+                                    ৩ ঘণ্টা আগে
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- Right side -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2 class="panel-title">
+                        <i class="fa-solid fa-tower-broadcast"></i>
+                        Real-Time Activity
+                    </h2>
+
+                    <span class="badge-custom badge-success">
+                        LIVE
+                    </span>
+
+                </div>
+
+
+                <div class="activity-feed"
+                     id="activityFeed">
+
+
+                    <div class="activity-item">
+
+                        <div class="activity-icon bg-green">
+                            <i class="fa-solid fa-fingerprint"></i>
+                        </div>
+
+                        <div class="activity-content">
+
+                            <strong>
+                                Biometric verification completed
+                            </strong>
+
+                            <span>
+                                NID matching successful
+                            </span>
+
+                            <div class="activity-time">
+                                এখনই
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="activity-item">
+
+                        <div class="activity-icon bg-blue">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </div>
+
+                        <div class="activity-content">
+
+                            <strong>
+                                New prisoner registered
+                            </strong>
+
+                            <span>
+                                Prisoner ID #PR-2026-9421
+                            </span>
+
+                            <div class="activity-time">
+                                ২ মিনিট আগে
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="activity-item">
+
+                        <div class="activity-icon bg-orange">
+                            <i class="fa-solid fa-right-left"></i>
+                        </div>
+
+                        <div class="activity-content">
+
+                            <strong>
+                                Transfer operation completed
+                            </strong>
+
+                            <span>
+                                Destination: Kishoreganj
+                            </span>
+
+                            <div class="activity-time">
+                                ৮ মিনিট আগে
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="activity-item">
+
+                        <div class="activity-icon bg-blue">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+
+                        <div class="activity-content">
+
+                            <strong>
+                                User login detected
+                            </strong>
+
+                            <span>
+                                Secure workstation session
+                            </span>
+
+                            <div class="activity-time">
+                                ১২ মিনিট আগে
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             RISK ALERTS
+        ================================================== -->
+
+        <section class="panel mb-3">
+
+            <div class="panel-header">
+
+                <h2 class="panel-title">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    গুরুত্বপূর্ণ নিরাপত্তা ও AI Risk Alert
+                </h2>
+
+                <a href="reports.html"
+                   class="panel-link">
+                    বিস্তারিত →
+                </a>
+
+            </div>
+
+
+            <div class="alert-list">
+
+
+                <div class="alert-item">
+
+                    <div class="alert-icon bg-red">
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    </div>
+
+                    <div class="alert-content">
+
+                        <strong>
+                            High Risk Profile Detected
+                        </strong>
+
+                        <span>
+                            AI analytics একটি profile-কে high-risk হিসেবে flag করেছে।
+                        </span>
+
+                    </div>
+
+                    <span class="badge-custom badge-danger">
+                        HIGH
+                    </span>
+
+                </div>
+
+
+                <div class="alert-item">
+
+                    <div class="alert-icon bg-orange">
+
+                        <i class="fa-solid fa-fingerprint"></i>
+
+                    </div>
+
+                    <div class="alert-content">
+
+                        <strong>
+                            Biometric Verification Retry
+                        </strong>
+
+                        <span>
+                            একটি fingerprint verification পুনরায় সম্পাদন করা প্রয়োজন।
+                        </span>
+
+                    </div>
+
+                    <span class="badge-custom badge-warning">
+                        REVIEW
+                    </span>
+
+                </div>
+
+
+                <div class="alert-item">
+
+                    <div class="alert-icon bg-blue">
+
+                        <i class="fa-solid fa-server"></i>
+
+                    </div>
+
+                    <div class="alert-content">
+
+                        <strong>
+                            Database Backup Completed
+                        </strong>
+
+                        <span>
+                            সর্বশেষ encrypted database backup সফলভাবে সম্পন্ন হয়েছে।
+                        </span>
+
+                    </div>
+
+                    <span class="badge-custom badge-success">
+                        OK
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- Footer -->
+
+        <footer class="dashboard-footer">
+
+            <div>
+                PMS • Prisoner Management System
+            </div>
+
+            <div class="footer-status">
+
+                <span class="status-dot"></span>
+
+                Central Server Connected
+
+            </div>
+
+            <div>
+                v1.0.0 • 2026
+            </div>
+
+        </footer>
+
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+const sidebar = document.getElementById("sidebar");
+const sidebarToggle = document.getElementById("sidebarToggle");
+
+sidebarToggle.addEventListener("click", function () {
+
+    if (window.innerWidth <= 700) {
+
+        sidebar.classList.toggle("mobile-open");
+
+    } else {
+
+        sidebar.classList.toggle("collapsed");
+
+    }
+
+});
+
+
+/* =========================================================
+   LIVE CLOCK
+========================================================= */
+
+function updateClock() {
+
+    const clock = document.getElementById("liveClock");
+
+    const now = new Date();
+
+    const time = now.toLocaleTimeString(
+        "bn-BD",
+        {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        }
+    );
+
+    clock.textContent = time;
+
+}
+
+updateClock();
+
+setInterval(updateClock, 1000);
+
+
+/* =========================================================
+   MAIN TREND CHART
+========================================================= */
+
+const trendCanvas =
+    document.getElementById("mainTrendChart");
+
+const trendChart =
+    new Chart(trendCanvas, {
+
+        type: "bar",
+
+        data: {
+
+            labels: [
+                "জানুয়ারি",
+                "ফেব্রুয়ারি",
+                "মার্চ",
+                "এপ্রিল",
+                "মে",
+                "জুন",
+                "জুলাই",
+                "আগস্ট"
+            ],
+
+            datasets: [
+
+                {
+                    label: "নতুন আগমন",
+
+                    data: [
+                        450,
+                        520,
+                        480,
+                        610,
+                        550,
+                        590,
+                        625,
+                        580
+                    ],
+
+                    backgroundColor: "#2563eb",
+
+                    borderRadius: 5
+                },
+
+                {
+                    label: "মুক্তি / বদলি",
+
+                    data: [
+                        300,
+                        410,
+                        390,
+                        480,
+                        420,
+                        510,
+                        450,
+                        530
+                    ],
+
+                    backgroundColor: "#10b981",
+
+                    borderRadius: 5
+                }
+
+            ]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            interaction: {
+                mode: "index",
+                intersect: false
+            },
+
+            plugins: {
+
+                legend: {
+                    position: "bottom",
+
+                    labels: {
+                        boxWidth: 12,
+                        font: {
+                            size: 10
+                        }
+                    }
+                }
+
+            },
+
+            scales: {
+
+                y: {
+                    beginAtZero: true,
+
+                    grid: {
+                        color: "#f1f5f9"
+                    },
+
+                    ticks: {
+                        font: {
+                            size: 9
+                        }
+                    }
+                },
+
+                x: {
+
+                    grid: {
+                        display: false
+                    },
+
+                    ticks: {
+                        font: {
+                            size: 9
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+
+/* =========================================================
+   NATURE / RISK CHART
+========================================================= */
+
+const pieCanvas =
+    document.getElementById("naturePieChart");
+
+const natureChart =
+    new Chart(pieCanvas, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: [
+                "সাধারণ বন্দি",
+                "হাজতি",
+                "রাজনৈতিক",
+                "উচ্চঝুঁকি / জঙ্গি"
+            ],
+
+            datasets: [
+
+                {
+
+                    data: [
+                        55,
+                        25,
+                        12,
+                        8
+                    ],
+
+                    backgroundColor: [
+                        "#2563eb",
+                        "#10b981",
+                        "#f59e0b",
+                        "#ef4444"
+                    ],
+
+                    borderWidth: 0,
+
+                    hoverOffset: 5
+
+                }
+
+            ]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            cutout: "63%",
+
+            plugins: {
+
+                legend: {
+
+                    position: "bottom",
+
+                    labels: {
+
+                        boxWidth: 10,
+
+                        padding: 10,
+
+                        font: {
+                            size: 9
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+
+/* =========================================================
+   DEMO REAL-TIME ACTIVITY
+   ---------------------------------------------------------
+   IMPORTANT:
+   This is only frontend simulation.
+
+   Future:
+   Replace this section with:
+
+       WebSocket
+       SignalR
+       Server-Sent Events
+       REST API
+
+========================================================= */
+
+const activityFeed =
+    document.getElementById("activityFeed");
+
+const demoActivities = [
+
+    {
+        icon: "fa-fingerprint",
+        title: "Fingerprint capture completed",
+        detail: "Futronic biometric device response received",
+        color: "bg-green"
+    },
+
+    {
+        icon: "fa-database",
+        title: "Central database synchronized",
+        detail: "PostgreSQL transaction completed",
+        color: "bg-blue"
+    },
+
+    {
+        icon: "fa-user-plus",
+        title: "New prisoner record created",
+        detail: "New registration transaction completed",
+        color: "bg-blue"
+    },
+
+    {
+        icon: "fa-shield-halved",
+        title: "Security audit event recorded",
+        detail: "Audit trail successfully stored",
+        color: "bg-orange"
+    }
+
+];
+
+
+let activityIndex = 0;
+
+
+function addLiveActivity() {
+
+    const item =
+        demoActivities[
+            activityIndex % demoActivities.length
+        ];
+
+    const element =
+        document.createElement("div");
+
+    element.className =
+        "activity-item";
+
+    element.innerHTML = `
+
+        <div class="activity-icon ${item.color}">
+            <i class="fa-solid ${item.icon}"></i>
+        </div>
+
+        <div class="activity-content">
+
+            <strong>
+                ${item.title}
+            </strong>
+
+            <span>
+                ${item.detail}
+            </span>
+
+            <div class="activity-time">
+                এখনই
+            </div>
+
+        </div>
+
+    `;
+
+    activityFeed.prepend(element);
+
+    while (activityFeed.children.length > 6) {
+
+        activityFeed.removeChild(
+            activityFeed.lastElementChild
+        );
+
+    }
+
+    activityIndex++;
+
+}
+
+
+/*
+   Demo interval.
+
+   Real project-এ এখানে WebSocket event বসবে।
+*/
+
+setInterval(
+    addLiveActivity,
+    15000
+);
+
+
+/* =========================================================
+   WINDOW RESIZE
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    function () {
+
+        if (window.innerWidth > 700) {
+
+            sidebar.classList.remove(
+                "mobile-open"
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
+

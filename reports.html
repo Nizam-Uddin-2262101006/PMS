@@ -1,0 +1,2705 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PMS | AI Analytics & Intelligence Report</title>
+
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Google Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --primary:#243b64;
+    --primary-dark:#172947;
+    --secondary:#3d5a80;
+    --accent:#0d9488;
+    --success:#198754;
+    --warning:#f59e0b;
+    --danger:#dc3545;
+    --info:#0d6efd;
+    --purple:#6f42c1;
+    --bg:#f4f7fb;
+    --card:#ffffff;
+    --border:#e5eaf1;
+    --text:#1f2937;
+    --muted:#6b7280;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Inter","Noto Sans Bengali",sans-serif;
+}
+
+/* =========================
+   TOP NAVIGATION
+========================= */
+
+.topbar{
+    height:68px;
+    background:linear-gradient(135deg,#172947,#243b64);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 25px;
+    box-shadow:0 4px 15px rgba(0,0,0,.10);
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.brand-area{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.brand-icon{
+    width:42px;
+    height:42px;
+    border-radius:11px;
+    background:rgba(255,255,255,.13);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+}
+
+.brand-title{
+    font-size:17px;
+    font-weight:800;
+}
+
+.brand-subtitle{
+    font-size:11px;
+    opacity:.72;
+    margin-top:2px;
+}
+
+.top-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.top-btn{
+    width:38px;
+    height:38px;
+    border:none;
+    border-radius:9px;
+    background:rgba(255,255,255,.10);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+}
+
+.top-btn:hover{
+    background:rgba(255,255,255,.20);
+}
+
+.user-box{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin-left:10px;
+}
+
+.user-avatar{
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    background:#fff;
+    color:var(--primary);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+}
+
+.user-name{
+    font-size:13px;
+    font-weight:700;
+}
+
+.user-role{
+    font-size:10px;
+    opacity:.7;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.page{
+    padding:24px;
+    max-width:1700px;
+    margin:auto;
+}
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+    margin-bottom:22px;
+}
+
+.page-title{
+    font-size:25px;
+    font-weight:800;
+    color:#172947;
+    margin-bottom:5px;
+}
+
+.page-description{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.header-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.btn-main{
+    border:none;
+    border-radius:8px;
+    padding:10px 15px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.btn-ai{
+    background:linear-gradient(135deg,#243b64,#6f42c1);
+    color:white;
+}
+
+.btn-ai:hover{
+    opacity:.92;
+}
+
+.btn-outline{
+    background:#fff;
+    color:#243b64;
+    border:1px solid var(--border);
+}
+
+
+/* =========================
+   AI STATUS
+========================= */
+
+.ai-status{
+    background:linear-gradient(135deg,#eef2ff,#f8faff);
+    border:1px solid #dbe3ff;
+    border-radius:13px;
+    padding:16px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:20px;
+    gap:20px;
+}
+
+.ai-left{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.ai-logo{
+    width:43px;
+    height:43px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#243b64,#6f42c1);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+}
+
+.ai-heading{
+    font-weight:800;
+    font-size:14px;
+}
+
+.ai-description{
+    color:#697386;
+    font-size:11px;
+    margin-top:3px;
+}
+
+.ai-live{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color:#198754;
+    font-size:12px;
+    font-weight:700;
+}
+
+.live-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#198754;
+    box-shadow:0 0 0 4px rgba(25,135,84,.12);
+}
+
+
+/* =========================
+   FILTER PANEL
+========================= */
+
+.filter-panel{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:18px;
+    margin-bottom:20px;
+    box-shadow:0 3px 12px rgba(20,35,60,.03);
+}
+
+.filter-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:14px;
+    font-weight:800;
+    margin-bottom:15px;
+    color:#243b64;
+}
+
+.form-label{
+    font-size:11px;
+    color:#687385;
+    font-weight:700;
+    margin-bottom:5px;
+}
+
+.form-control,
+.form-select{
+    height:38px;
+    border-radius:7px;
+    border:1px solid #dfe4eb;
+    font-size:12px;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color:#6c7fa5;
+    box-shadow:0 0 0 3px rgba(36,59,100,.08);
+}
+
+
+/* =========================
+   KPI CARDS
+========================= */
+
+.kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:14px;
+    margin-bottom:20px;
+}
+
+.kpi-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:16px;
+    position:relative;
+    overflow:hidden;
+    min-height:126px;
+    box-shadow:0 3px 12px rgba(20,35,60,.03);
+}
+
+.kpi-card::after{
+    content:"";
+    position:absolute;
+    right:-30px;
+    bottom:-35px;
+    width:95px;
+    height:95px;
+    border-radius:50%;
+    background:rgba(36,59,100,.035);
+}
+
+.kpi-icon{
+    width:37px;
+    height:37px;
+    border-radius:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:12px;
+    font-size:18px;
+}
+
+.icon-blue{
+    color:#0d6efd;
+    background:#eaf2ff;
+}
+
+.icon-green{
+    color:#198754;
+    background:#e9f8f0;
+}
+
+.icon-orange{
+    color:#d97706;
+    background:#fff5df;
+}
+
+.icon-red{
+    color:#dc3545;
+    background:#fdecee;
+}
+
+.icon-purple{
+    color:#6f42c1;
+    background:#f1ebff;
+}
+
+.icon-teal{
+    color:#0d9488;
+    background:#e5f8f5;
+}
+
+.kpi-label{
+    color:#727c8d;
+    font-size:11px;
+    font-weight:600;
+}
+
+.kpi-value{
+    font-size:23px;
+    font-weight:800;
+    color:#1d2b42;
+    margin-top:2px;
+}
+
+.kpi-change{
+    font-size:10px;
+    margin-top:3px;
+}
+
+.change-up{
+    color:#198754;
+}
+
+.change-down{
+    color:#dc3545;
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin-bottom:18px;
+}
+
+.grid-3{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:18px;
+    margin-bottom:18px;
+}
+
+.card-box{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:18px;
+    box-shadow:0 3px 12px rgba(20,35,60,.03);
+}
+
+.card-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:17px;
+}
+
+.card-title{
+    font-size:14px;
+    font-weight:800;
+    color:#243b64;
+}
+
+.card-subtitle{
+    font-size:10px;
+    color:#8a93a2;
+    margin-top:3px;
+}
+
+.card-menu{
+    border:1px solid #e3e7ed;
+    background:#fff;
+    width:31px;
+    height:31px;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+
+/* =========================
+   AI SUMMARY
+========================= */
+
+.ai-summary{
+    background:linear-gradient(135deg,#f5f3ff,#ffffff);
+    border:1px solid #e2dcff;
+    border-radius:13px;
+    padding:20px;
+    margin-bottom:18px;
+}
+
+.summary-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.summary-icon{
+    width:39px;
+    height:39px;
+    border-radius:10px;
+    background:#6f42c1;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.summary-title{
+    font-size:15px;
+    font-weight:800;
+    color:#34265e;
+}
+
+.summary-meta{
+    font-size:10px;
+    color:#88809f;
+}
+
+.summary-text{
+    font-size:13px;
+    line-height:1.8;
+    color:#454b58;
+    background:#fff;
+    border-radius:10px;
+    padding:15px;
+    border:1px solid #ebe8f6;
+}
+
+.ai-highlights{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-top:13px;
+}
+
+.highlight{
+    background:#fff;
+    border:1px solid #ebe8f6;
+    border-radius:9px;
+    padding:11px;
+}
+
+.highlight-label{
+    font-size:10px;
+    color:#8a8e98;
+}
+
+.highlight-value{
+    font-size:14px;
+    font-weight:800;
+    color:#34265e;
+    margin-top:3px;
+}
+
+
+/* =========================
+   CHART
+========================= */
+
+.chart-container{
+    height:280px;
+    position:relative;
+}
+
+.chart-small{
+    height:220px;
+}
+
+.chart-large{
+    height:310px;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.report-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.report-table th{
+    background:#f7f9fc;
+    color:#6c7584;
+    font-size:10px;
+    font-weight:800;
+    padding:10px;
+    text-align:left;
+    border-bottom:1px solid #e5e8ed;
+}
+
+.report-table td{
+    padding:11px 10px;
+    border-bottom:1px solid #edf0f4;
+    font-size:11px;
+}
+
+.report-table tr:last-child td{
+    border-bottom:none;
+}
+
+.badge-soft{
+    display:inline-flex;
+    padding:4px 8px;
+    border-radius:20px;
+    font-size:9px;
+    font-weight:700;
+}
+
+.badge-success{
+    background:#e9f8f0;
+    color:#198754;
+}
+
+.badge-warning{
+    background:#fff4dd;
+    color:#b36a00;
+}
+
+.badge-danger{
+    background:#fdecee;
+    color:#c52d3d;
+}
+
+.badge-info{
+    background:#eaf2ff;
+    color:#0d6efd;
+}
+
+
+/* =========================
+   INSIGHT LIST
+========================= */
+
+.insight-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.insight-item{
+    display:flex;
+    gap:11px;
+    padding:12px;
+    border:1px solid #edf0f4;
+    border-radius:9px;
+    background:#fbfcfe;
+}
+
+.insight-icon{
+    width:31px;
+    height:31px;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+}
+
+.insight-title{
+    font-size:11px;
+    font-weight:800;
+    color:#303846;
+}
+
+.insight-text{
+    font-size:10px;
+    color:#747c89;
+    line-height:1.6;
+    margin-top:2px;
+}
+
+
+/* =========================
+   DATA QUALITY
+========================= */
+
+.quality-score{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    padding:15px;
+}
+
+.score-circle{
+    width:125px;
+    height:125px;
+    border-radius:50%;
+    border:12px solid #e8f4ee;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    margin-bottom:10px;
+}
+
+.score-number{
+    font-size:28px;
+    font-weight:800;
+    color:#198754;
+}
+
+.score-label{
+    font-size:9px;
+    color:#8b939e;
+}
+
+
+/* =========================
+   ALERTS
+========================= */
+
+.alert-item{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:11px 0;
+    border-bottom:1px solid #edf0f4;
+}
+
+.alert-item:last-child{
+    border-bottom:none;
+}
+
+.alert-icon{
+    width:30px;
+    height:30px;
+    border-radius:7px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+}
+
+.alert-title{
+    font-size:11px;
+    font-weight:800;
+}
+
+.alert-description{
+    font-size:10px;
+    color:#7b8490;
+    line-height:1.5;
+}
+
+
+/* =========================
+   REPORT FOOTER
+========================= */
+
+.report-footer{
+    margin-top:20px;
+    padding:15px 5px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    color:#8a929e;
+    font-size:10px;
+}
+
+.confidential{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    color:#b32635;
+    font-weight:700;
+}
+
+
+/* =========================
+   LOADING MODAL
+========================= */
+
+.ai-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(15,25,45,.55);
+    backdrop-filter:blur(3px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:3000;
+}
+
+.ai-modal{
+    width:390px;
+    background:#fff;
+    border-radius:16px;
+    padding:28px;
+    text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+
+.ai-animation{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    border:4px solid #e9e5ff;
+    border-top-color:#6f42c1;
+    animation:spin 1s linear infinite;
+    margin:0 auto 18px;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.ai-modal-title{
+    font-size:17px;
+    font-weight:800;
+    color:#283552;
+}
+
+.ai-modal-text{
+    color:#7c8491;
+    font-size:11px;
+    margin-top:6px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1300px){
+
+    .kpi-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .ai-highlights{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:900px){
+
+    .grid-2,
+    .grid-3{
+        grid-template-columns:1fr;
+    }
+
+    .page-header{
+        flex-direction:column;
+    }
+
+    .topbar{
+        padding:0 14px;
+    }
+
+    .user-name,
+    .user-role{
+        display:none;
+    }
+}
+
+@media(max-width:600px){
+
+    .page{
+        padding:12px;
+    }
+
+    .kpi-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .ai-highlights{
+        grid-template-columns:1fr;
+    }
+
+    .brand-subtitle{
+        display:none;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
+
+<header class="topbar">
+
+    <div class="brand-area">
+
+        <div class="brand-icon">
+            <i class="bi bi-shield-lock-fill"></i>
+        </div>
+
+        <div>
+            <div class="brand-title">
+                PMS Intelligence Center
+            </div>
+
+            <div class="brand-subtitle">
+                Prisoner Information Management System
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="top-actions">
+
+        <button class="top-btn" title="Refresh">
+            <i class="bi bi-arrow-clockwise"></i>
+        </button>
+
+        <button class="top-btn" title="Notifications">
+            <i class="bi bi-bell"></i>
+        </button>
+
+        <button class="top-btn" title="Settings">
+            <i class="bi bi-gear"></i>
+        </button>
+
+        <div class="user-box">
+
+            <div class="user-avatar">
+                NU
+            </div>
+
+            <div>
+                <div class="user-name">
+                    System Administrator
+                </div>
+
+                <div class="user-role">
+                    Authorized User
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<main class="page">
+
+
+<!-- =====================================================
+     PAGE HEADER
+===================================================== -->
+
+<section class="page-header">
+
+    <div>
+
+        <div class="page-title">
+            AI Analytics & Report Center
+        </div>
+
+        <div class="page-description">
+            Criminal & Prisoner Database — Analytical Intelligence Dashboard
+        </div>
+
+    </div>
+
+
+    <div class="header-actions">
+
+        <button class="btn-main btn-outline" onclick="window.print()">
+            <i class="bi bi-printer me-1"></i>
+            Print Report
+        </button>
+
+        <button class="btn-main btn-outline" onclick="exportReport()">
+            <i class="bi bi-file-earmark-pdf me-1"></i>
+            Export Report
+        </button>
+
+        <button class="btn-main btn-ai" onclick="runAIAnalysis()">
+            <i class="bi bi-stars me-1"></i>
+            Generate AI Analysis
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     AI STATUS
+===================================================== -->
+
+<section class="ai-status">
+
+    <div class="ai-left">
+
+        <div class="ai-logo">
+            <i class="bi bi-stars"></i>
+        </div>
+
+        <div>
+
+            <div class="ai-heading">
+                PMS AI Analytical Engine
+            </div>
+
+            <div class="ai-description">
+                Database statistics, trends, distributions and data-quality analysis
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="ai-live">
+
+        <span class="live-dot"></span>
+
+        AI Analysis Engine Ready
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FILTER
+===================================================== -->
+
+<section class="filter-panel">
+
+    <div class="filter-title">
+
+        <i class="bi bi-sliders2"></i>
+
+        Report Parameters
+
+    </div>
+
+
+    <div class="row g-3">
+
+        <div class="col-lg-2 col-md-4">
+
+            <label class="form-label">
+                From Date
+            </label>
+
+            <input
+                type="date"
+                class="form-control"
+                value="2026-01-01">
+
+        </div>
+
+
+        <div class="col-lg-2 col-md-4">
+
+            <label class="form-label">
+                To Date
+            </label>
+
+            <input
+                type="date"
+                class="form-control"
+                value="2026-10-03">
+
+        </div>
+
+
+        <div class="col-lg-2 col-md-4">
+
+            <label class="form-label">
+                Division
+            </label>
+
+            <select class="form-select">
+
+                <option>All Divisions</option>
+                <option>Dhaka</option>
+                <option>Chattogram</option>
+                <option>Rajshahi</option>
+                <option>Khulna</option>
+                <option>Barishal</option>
+                <option>Sylhet</option>
+                <option>Rangpur</option>
+                <option>Mymensingh</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="col-lg-2 col-md-4">
+
+            <label class="form-label">
+                Facility
+            </label>
+
+            <select class="form-select">
+
+                <option>All Facilities</option>
+                <option>Central Facility</option>
+                <option>District Facility</option>
+                <option>Special Facility</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="col-lg-2 col-md-4">
+
+            <label class="form-label">
+                Case Category
+            </label>
+
+            <select class="form-select">
+
+                <option>All Categories</option>
+                <option>Violent Offence</option>
+                <option>Property Offence</option>
+                <option>Drug Related</option>
+                <option>Financial Offence</option>
+                <option>Other</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="col-lg-2 col-md-4 d-flex align-items-end">
+
+            <button
+                class="btn-main btn-ai w-100"
+                onclick="updateReport()">
+
+                <i class="bi bi-bar-chart-line me-1"></i>
+
+                Apply Analysis
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     KPI
+===================================================== -->
+
+<section class="kpi-grid">
+
+
+    <div class="kpi-card">
+
+        <div class="kpi-icon icon-blue">
+            <i class="bi bi-people-fill"></i>
+        </div>
+
+        <div class="kpi-label">
+            Total Records
+        </div>
+
+        <div class="kpi-value">
+            48,625
+        </div>
+
+        <div class="kpi-change change-up">
+            <i class="bi bi-arrow-up"></i>
+            4.8% vs previous period
+        </div>
+
+    </div>
+
+
+
+    <div class="kpi-card">
+
+        <div class="kpi-icon icon-green">
+            <i class="bi bi-person-check-fill"></i>
+        </div>
+
+        <div class="kpi-label">
+            Active Records
+        </div>
+
+        <div class="kpi-value">
+            31,284
+        </div>
+
+        <div class="kpi-change">
+            64.3% of total records
+        </div>
+
+    </div>
+
+
+
+    <div class="kpi-card">
+
+        <div class="kpi-icon icon-orange">
+            <i class="bi bi-folder-fill"></i>
+        </div>
+
+        <div class="kpi-label">
+            Active Cases
+        </div>
+
+        <div class="kpi-value">
+            36,902
+        </div>
+
+        <div class="kpi-change">
+            Across all facilities
+        </div>
+
+    </div>
+
+
+
+    <div class="kpi-card">
+
+        <div class="kpi-icon icon-purple">
+            <i class="bi bi-arrow-repeat"></i>
+        </div>
+
+        <div class="kpi-label">
+            Multiple Records
+        </div>
+
+        <div class="kpi-value">
+            8,417
+        </div>
+
+        <div class="kpi-change">
+            17.3% of database
+        </div>
+
+    </div>
+
+
+
+    <div class="kpi-card">
+
+        <div class="kpi-icon icon-red">
+            <i class="bi bi-calendar-x-fill"></i>
+        </div>
+
+        <div class="kpi-label">
+            Sentence / Review Due
+        </div>
+
+        <div class="kpi-value">
+            1,286
+        </div>
+
+        <div class="kpi-change">
+            Requires administrative review
+        </div>
+
+    </div>
+
+
+
+    <div class="kpi-card">
+
+        <div class="kpi-icon icon-teal">
+            <i class="bi bi-database-check"></i>
+        </div>
+
+        <div class="kpi-label">
+            Data Quality
+        </div>
+
+        <div class="kpi-value">
+            96.8%
+        </div>
+
+        <div class="kpi-change change-up">
+            <i class="bi bi-check-circle"></i>
+            Good quality
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     AI EXECUTIVE SUMMARY
+===================================================== -->
+
+<section class="ai-summary">
+
+    <div class="summary-header">
+
+        <div class="summary-icon">
+            <i class="bi bi-stars"></i>
+        </div>
+
+        <div>
+
+            <div class="summary-title">
+                AI Generated Executive Summary
+            </div>
+
+            <div class="summary-meta">
+                Generated from current PMS database filters
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="summary-text" id="aiSummary">
+
+        <strong>সহজ ভাষায় সারসংক্ষেপ:</strong>
+
+        বর্তমান নির্বাচিত সময়সীমা ও ফিল্টার অনুযায়ী PMS database-এ
+        মোট <strong>48,625টি record</strong> রয়েছে।
+
+        এর মধ্যে প্রায় <strong>31,284টি record বর্তমানে active</strong>।
+        Database-এর একটি উল্লেখযোগ্য অংশ একাধিক case বা historical record
+        ধারণ করছে।
+
+        Case category বিশ্লেষণে দেখা যাচ্ছে যে কয়েকটি category মোট
+        case volume-এর বড় অংশ তৈরি করছে। একই সঙ্গে কিছু record-এ
+        missing বা অসম্পূর্ণ তথ্য পাওয়া যাচ্ছে, যেগুলো data verification
+        team-এর মাধ্যমে review করা যেতে পারে।
+
+        এই analysis শুধুমাত্র database-এ থাকা documented তথ্যের
+        statistical interpretation এবং administrative reporting-এর জন্য
+        ব্যবহৃত হচ্ছে।
+
+    </div>
+
+
+    <div class="ai-highlights">
+
+        <div class="highlight">
+
+            <div class="highlight-label">
+                Largest Case Category
+            </div>
+
+            <div class="highlight-value">
+                Drug Related
+            </div>
+
+        </div>
+
+
+        <div class="highlight">
+
+            <div class="highlight-label">
+                Highest Record Facility
+            </div>
+
+            <div class="highlight-value">
+                Central Facility
+            </div>
+
+        </div>
+
+
+        <div class="highlight">
+
+            <div class="highlight-label">
+                Most Common Age Group
+            </div>
+
+            <div class="highlight-value">
+                25–34 Years
+            </div>
+
+        </div>
+
+
+        <div class="highlight">
+
+            <div class="highlight-label">
+                Data Review Items
+            </div>
+
+            <div class="highlight-value">
+                1,562 Records
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     TREND + CATEGORY
+===================================================== -->
+
+<section class="grid-2">
+
+
+    <div class="card-box">
+
+        <div class="card-head">
+
+            <div>
+
+                <div class="card-title">
+                    Record Trend Analysis
+                </div>
+
+                <div class="card-subtitle">
+                    Monthly record movement
+                </div>
+
+            </div>
+
+            <button class="card-menu">
+                <i class="bi bi-three-dots"></i>
+            </button>
+
+        </div>
+
+
+        <div class="chart-container">
+
+            <canvas id="trendChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card-box">
+
+        <div class="card-head">
+
+            <div>
+
+                <div class="card-title">
+                    Case Category Distribution
+                </div>
+
+                <div class="card-subtitle">
+                    Current database classification
+                </div>
+
+            </div>
+
+            <button class="card-menu">
+                <i class="bi bi-three-dots"></i>
+            </button>
+
+        </div>
+
+
+        <div class="chart-container">
+
+            <canvas id="categoryChart"></canvas>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     DEMOGRAPHIC ANALYSIS
+===================================================== -->
+
+<section class="grid-3">
+
+
+    <div class="card-box">
+
+        <div class="card-head">
+
+            <div>
+
+                <div class="card-title">
+                    Age Distribution
+                </div>
+
+                <div class="card-subtitle">
+                    Distribution by age group
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="chart-small">
+
+            <canvas id="ageChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card-box">
+
+        <div class="card-head">
+
+            <div>
+
+                <div class="card-title">
+                    Facility Distribution
+                </div>
+
+                <div class="card-subtitle">
+                    Records by facility
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="chart-small">
+
+            <canvas id="facilityChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card-box">
+
+        <div class="card-head">
+
+            <div>
+
+                <div class="card-title">
+                    Record Status
+                </div>
+
+                <div class="card-subtitle">
+                    Current administrative status
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="chart-small">
+
+            <canvas id="statusChart"></canvas>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     AI INSIGHTS + DATA QUALITY
+===================================================== -->
+
+<section class="grid-2">
+
+
+    <div class="card-box">
+
+        <div class="card-head">
+
+            <div>
+
+                <div class="card-title">
+                    AI Analytical Insights
+                </div>
+
+                <div class="card-subtitle">
+                    Automatically detected database patterns
+                </div>
+
+            </div>
+
+            <i class="bi bi-stars text-primary"></i>
+
+        </div>
+
+
+        <div class="insight-list">
+
+
+            <div class="insight-item">
+
+                <div class="insight-icon icon-blue">
+
+                    <i class="bi bi-graph-up"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="insight-title">
+                        Record volume increased
+                    </div>
+
+                    <div class="insight-text">
+                        Current period shows higher record activity
+                        compared with the previous reporting period.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="insight-item">
+
+                <div class="insight-icon icon-orange">
+
+                    <i class="bi bi-bar-chart-fill"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="insight-title">
+                        Category concentration detected
+                    </div>
+
+                    <div class="insight-text">
+                        A limited number of case categories account for
+                        a large portion of the current database.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="insight-item">
+
+                <div class="insight-icon icon-purple">
+
+                    <i class="bi bi-diagram-3-fill"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="insight-title">
+                        Multiple-record relationships
+                    </div>
+
+                    <div class="insight-text">
+                        Several records contain multiple case or historical
+                        associations that may require administrative review.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="insight-item">
+
+                <div class="insight-icon icon-green">
+
+                    <i class="bi bi-database-check"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="insight-title">
+                        Overall database quality is stable
+                    </div>
+
+                    <div class="insight-text">
+                        Most mandatory fields are populated. A smaller
+                        group of records requires information verification.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card-box">
+
+        <div class="card-head">
+
+            <div>
+
+                <div class="card-title">
+                    Data Quality Analysis
+                </div>
+
+                <div class="card-subtitle">
+                    Automated database validation
+                </div>
+
+            </div>
+
+            <i class="bi bi-shield-check text-success"></i>
+
+        </div>
+
+
+        <div class="quality-score">
+
+            <div class="score-circle">
+
+                <div class="score-number">
+                    96.8%
+                </div>
+
+                <div class="score-label">
+                    QUALITY SCORE
+                </div>
+
+            </div>
+
+            <div class="text-center">
+
+                <strong style="font-size:13px;">
+                    Database Quality: Good
+                </strong>
+
+                <div
+                    style="font-size:10px;color:#7d8591;margin-top:5px;">
+
+                    Based on completeness, consistency and validation checks.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row mt-2">
+
+            <div class="col-4 text-center">
+
+                <div
+                    style="font-size:18px;font-weight:800;color:#198754;">
+                    98.4%
+                </div>
+
+                <div style="font-size:9px;color:#7d8591;">
+                    Complete
+                </div>
+
+            </div>
+
+
+            <div class="col-4 text-center">
+
+                <div
+                    style="font-size:18px;font-weight:800;color:#0d6efd;">
+                    97.1%
+                </div>
+
+                <div style="font-size:9px;color:#7d8591;">
+                    Consistent
+                </div>
+
+            </div>
+
+
+            <div class="col-4 text-center">
+
+                <div
+                    style="font-size:18px;font-weight:800;color:#d97706;">
+                    1,562
+                </div>
+
+                <div style="font-size:9px;color:#7d8591;">
+                    Review Items
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     REVIEW ALERTS
+===================================================== -->
+
+<section class="card-box mb-3">
+
+    <div class="card-head">
+
+        <div>
+
+            <div class="card-title">
+                Administrative Review Alerts
+            </div>
+
+            <div class="card-subtitle">
+                Records requiring data or administrative verification
+            </div>
+
+        </div>
+
+        <button class="btn-main btn-outline">
+
+            View All
+
+            <i class="bi bi-arrow-right ms-1"></i>
+
+        </button>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-lg-4">
+
+            <div class="alert-item">
+
+                <div class="alert-icon icon-orange">
+
+                    <i class="bi bi-calendar-event"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="alert-title">
+                        Date Verification
+                    </div>
+
+                    <div class="alert-description">
+                        Some records contain incomplete or inconsistent
+                        date information.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-4">
+
+            <div class="alert-item">
+
+                <div class="alert-icon icon-red">
+
+                    <i class="bi bi-file-earmark-x"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="alert-title">
+                        Missing Documents
+                    </div>
+
+                    <div class="alert-description">
+                        Supporting document information is missing
+                        from selected records.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-4">
+
+            <div class="alert-item">
+
+                <div class="alert-icon icon-purple">
+
+                    <i class="bi bi-person-lines-fill"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="alert-title">
+                        Duplicate / Similar Records
+                    </div>
+
+                    <div class="alert-description">
+                        Similar identity information was detected and
+                        may require manual verification.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     TOP CATEGORIES TABLE
+===================================================== -->
+
+<section class="grid-2">
+
+
+    <div class="card-box">
+
+        <div class="card-head">
+
+            <div>
+
+                <div class="card-title">
+                    Case Category Summary
+                </div>
+
+                <div class="card-subtitle">
+                    Statistical overview
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="report-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Category</th>
+                        <th>Records</th>
+                        <th>%</th>
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>Drug Related</td>
+                        <td>11,284</td>
+                        <td>30.6%</td>
+
+                        <td>
+                            <span class="badge-soft badge-info">
+                                High Volume
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Property Offence</td>
+                        <td>8,762</td>
+                        <td>23.7%</td>
+
+                        <td>
+                            <span class="badge-soft badge-success">
+                                Stable
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Violent Offence</td>
+                        <td>6,418</td>
+                        <td>17.4%</td>
+
+                        <td>
+                            <span class="badge-soft badge-warning">
+                                Review
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Financial Offence</td>
+                        <td>4,926</td>
+                        <td>13.4%</td>
+
+                        <td>
+                            <span class="badge-soft badge-success">
+                                Stable
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Other</td>
+                        <td>5,512</td>
+                        <td>14.9%</td>
+
+                        <td>
+                            <span class="badge-soft badge-info">
+                                Normal
+                            </span>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card-box">
+
+        <div class="card-head">
+
+            <div>
+
+                <div class="card-title">
+                    Geographic Distribution
+                </div>
+
+                <div class="card-subtitle">
+                    Record distribution by division
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="report-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Division</th>
+                        <th>Records</th>
+                        <th>Share</th>
+                        <th>Trend</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>Dhaka</td>
+                        <td>14,825</td>
+                        <td>30.5%</td>
+
+                        <td>
+                            <span class="badge-soft badge-info">
+                                ↑
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Chattogram</td>
+                        <td>8,642</td>
+                        <td>17.8%</td>
+
+                        <td>
+                            <span class="badge-soft badge-success">
+                                →
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Rajshahi</td>
+                        <td>6,984</td>
+                        <td>14.4%</td>
+
+                        <td>
+                            <span class="badge-soft badge-success">
+                                →
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Khulna</td>
+                        <td>5,421</td>
+                        <td>11.2%</td>
+
+                        <td>
+                            <span class="badge-soft badge-warning">
+                                ↑
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Other Divisions</td>
+                        <td>12,753</td>
+                        <td>26.1%</td>
+
+                        <td>
+                            <span class="badge-soft badge-success">
+                                →
+                            </span>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="report-footer">
+
+    <div>
+
+        PMS AI Analytics Engine |
+        Report generated:
+        <span id="reportDate"></span>
+
+    </div>
+
+
+    <div class="confidential">
+
+        <i class="bi bi-shield-lock-fill"></i>
+
+        CONFIDENTIAL — AUTHORIZED ACCESS ONLY
+
+    </div>
+
+</footer>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     AI MODAL
+===================================================== -->
+
+<div class="ai-overlay" id="aiOverlay">
+
+    <div class="ai-modal">
+
+        <div class="ai-animation"></div>
+
+        <div class="ai-modal-title">
+            AI Analysis in Progress
+        </div>
+
+        <div class="ai-modal-text">
+            PMS database patterns, statistics and data quality
+            information are being analyzed...
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+/* =========================
+   CURRENT DATE
+========================= */
+
+document.getElementById("reportDate").textContent =
+    new Date().toLocaleString("en-GB");
+
+
+/* =========================
+   COMMON CHART OPTIONS
+========================= */
+
+const commonOptions = {
+
+    responsive:true,
+
+    maintainAspectRatio:false,
+
+    plugins:{
+        legend:{
+            labels:{
+                font:{
+                    size:10
+                }
+            }
+        }
+    }
+
+};
+
+
+/* =========================
+   TREND CHART
+========================= */
+
+new Chart(
+    document.getElementById("trendChart"),
+    {
+
+        type:"line",
+
+        data:{
+
+            labels:[
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct"
+            ],
+
+            datasets:[{
+
+                label:"Records",
+
+                data:[
+                    3500,
+                    3900,
+                    4100,
+                    4300,
+                    4550,
+                    4700,
+                    4820,
+                    4950,
+                    5100,
+                    5200
+                ],
+
+                tension:.4,
+
+                fill:true,
+
+                backgroundColor:"rgba(36,59,100,.08)",
+
+                borderColor:"#243b64",
+
+                borderWidth:2,
+
+                pointRadius:3
+
+            }]
+
+        },
+
+        options:{
+
+            ...commonOptions,
+
+            scales:{
+
+                y:{
+                    beginAtZero:false,
+                    grid:{
+                        color:"#eef1f5"
+                    }
+                },
+
+                x:{
+                    grid:{
+                        display:false
+                    }
+                }
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================
+   CATEGORY CHART
+========================= */
+
+new Chart(
+    document.getElementById("categoryChart"),
+    {
+
+        type:"doughnut",
+
+        data:{
+
+            labels:[
+                "Drug Related",
+                "Property",
+                "Violent",
+                "Financial",
+                "Other"
+            ],
+
+            datasets:[{
+
+                data:[
+                    30.6,
+                    23.7,
+                    17.4,
+                    13.4,
+                    14.9
+                ],
+
+                borderWidth:2,
+
+                borderColor:"#fff"
+
+            }]
+
+        },
+
+        options:{
+
+            ...commonOptions,
+
+            cutout:"66%",
+
+            plugins:{
+                legend:{
+                    position:"right",
+
+                    labels:{
+                        boxWidth:11,
+                        font:{
+                            size:10
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================
+   AGE CHART
+========================= */
+
+new Chart(
+    document.getElementById("ageChart"),
+    {
+
+        type:"bar",
+
+        data:{
+
+            labels:[
+                "18–24",
+                "25–34",
+                "35–44",
+                "45–54",
+                "55+"
+            ],
+
+            datasets:[{
+
+                label:"Records",
+
+                data:[
+                    17,
+                    31,
+                    24,
+                    16,
+                    12
+                ],
+
+                borderRadius:5
+
+            }]
+
+        },
+
+        options:{
+
+            ...commonOptions,
+
+            plugins:{
+                legend:{
+                    display:false
+                }
+            },
+
+            scales:{
+                y:{
+                    beginAtZero:true
+                }
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================
+   FACILITY CHART
+========================= */
+
+new Chart(
+    document.getElementById("facilityChart"),
+    {
+
+        type:"bar",
+
+        data:{
+
+            labels:[
+                "Central",
+                "District",
+                "Special",
+                "Other"
+            ],
+
+            datasets:[{
+
+                label:"Records",
+
+                data:[
+                    42,
+                    28,
+                    18,
+                    12
+                ],
+
+                borderRadius:5
+
+            }]
+
+        },
+
+        options:{
+
+            ...commonOptions,
+
+            indexAxis:"y",
+
+            plugins:{
+                legend:{
+                    display:false
+                }
+            },
+
+            scales:{
+                x:{
+                    beginAtZero:true
+                }
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================
+   STATUS CHART
+========================= */
+
+new Chart(
+    document.getElementById("statusChart"),
+    {
+
+        type:"doughnut",
+
+        data:{
+
+            labels:[
+                "Active",
+                "Released",
+                "Transferred",
+                "Closed"
+            ],
+
+            datasets:[{
+
+                data:[
+                    64,
+                    18,
+                    10,
+                    8
+                ],
+
+                borderWidth:2,
+
+                borderColor:"#fff"
+
+            }]
+
+        },
+
+        options:{
+
+            ...commonOptions,
+
+            cutout:"63%",
+
+            plugins:{
+                legend:{
+                    position:"bottom",
+
+                    labels:{
+                        boxWidth:10,
+                        font:{
+                            size:9
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================
+   AI ANALYSIS
+========================= */
+
+function runAIAnalysis(){
+
+    const overlay =
+        document.getElementById("aiOverlay");
+
+    overlay.style.display = "flex";
+
+
+    setTimeout(function(){
+
+        overlay.style.display = "none";
+
+
+        document.getElementById("aiSummary").innerHTML = `
+
+            <strong>AI বিশ্লেষণের সহজ সারসংক্ষেপ:</strong>
+
+            বর্তমান filter অনুযায়ী PMS database-এ
+            <strong>48,625টি record</strong> পাওয়া গেছে।
+
+            এর মধ্যে <strong>31,284টি active record</strong>।
+            Case category বিশ্লেষণে Drug Related এবং Property
+            related category-তে তুলনামূলকভাবে বেশি record রয়েছে।
+
+            Facility distribution-এ Central Facility-তে সবচেয়ে বেশি
+            record রয়েছে। Age distribution অনুযায়ী 25–34 বছর
+            বয়সের group-এ record share তুলনামূলকভাবে বেশি।
+
+            এছাড়া কিছু record-এ incomplete date, missing document
+            অথবা similar identity information পাওয়া গেছে।
+            এগুলোকে administrative verification-এর জন্য আলাদাভাবে
+            review করা যেতে পারে।
+
+            <br><br>
+
+            <strong>AI Note:</strong>
+            এই report database-এর documented information থেকে
+            descriptive statistical analysis তৈরি করে।
+            এটি কোনো ব্যক্তির ভবিষ্যৎ আচরণ, অপরাধের সম্ভাবনা,
+            বা ব্যক্তিগত risk determination করে না।
+
+        `;
+
+    },2200);
+
+}
+
+
+/* =========================
+   UPDATE REPORT
+========================= */
+
+function updateReport(){
+
+    runAIAnalysis();
+
+}
+
+
+/* =========================
+   EXPORT
+========================= */
+
+function exportReport(){
+
+    alert(
+        "Report export module is ready for backend integration."
+    );
+
+}
+
+
+/* =========================
+   REFRESH
+========================= */
+
+document.querySelector(".top-btn").addEventListener(
+    "click",
+    function(){
+
+        location.reload();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
